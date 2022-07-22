@@ -17,14 +17,14 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 RUN rm -rf /var/lib/apt/lists/*
 
 # ディレクトリ・ファイルの作成
-RUN mkdir /interview-skill-check
-WORKDIR /interview-skill-check
-COPY Gemfile /interview-skill-check/Gemfile
-COPY Gemfile.lock /interview-skill-check/Gemfile.lock
+RUN mkdir /intern-2022
+WORKDIR /intern-2022
+COPY Gemfile /intern-2022/Gemfile
+COPY Gemfile.lock /intern-2022/Gemfile.lock
 
 # gem(Rails6)のインストール
 RUN bundle install
-COPY . /interview-skill-check
+COPY . /intern-2022
 
 RUN yarn install --check-files
 RUN bundle exec rails webpacker:compile
