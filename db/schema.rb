@@ -10,19 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_24_051358) do
+ActiveRecord::Schema.define(version: 2022_07_22_060630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "authors", force: :cascade do |t|
+    t.string "last_name"
+    t.string "first_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "title"
+    t.bigint "author_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_books_on_author_id"
+  end
+
+  create_table "rentals", force: :cascade do |t|
+    t.bigint "book_id"
+    t.bigint "user_id"
+    t.date "rented_date"
+    t.date "scheduled_return_date"
+    t.date "return_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_rentals_on_book_id"
+    t.index ["user_id"], name: "index_rentals_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "last_name"
     t.string "first_name"
-    t.integer "age"
     t.string "email"
     t.string "encrypted_password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "books", "authors"
+  add_foreign_key "rentals", "books"
+  add_foreign_key "rentals", "users"
 end
