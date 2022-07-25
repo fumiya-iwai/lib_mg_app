@@ -5,7 +5,7 @@ class CreateRentals < ActiveRecord::Migration[6.1]
       t.references :user, foreign_key: true
       t.date :rented_date
       t.date :scheduled_return_date
-      t.date :return_date
+      t.date :returned_date
 
       t.timestamps
     end

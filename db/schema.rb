@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2022_07_22_060630) do
     t.bigint "user_id"
     t.date "rented_date"
     t.date "scheduled_return_date"
-    t.date "return_date"
+    t.date "returned_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_rentals_on_book_id"
