@@ -1,11 +1,13 @@
 <template>
-  <p>{{ message }}</p>
+  <header>
+    <div id="nav">
+      <router-link to="/books">図書一覧</router-link> |
+      <router-link to="/rentals">貸出</router-link> |
+      <router-link to="/books/new">図書登録</router-link> |
+      <router-link to="/authors/new">著者登録</router-link>
+    </div>
+  </header>
 
-  <div id="nav">
-    <router-link to="/">HomePage</router-link> |
-    <router-link to="/users">UserListPage</router-link> |
-    <router-link to="/users/register">UserRegisterPage</router-link>
-  </div>
   <router-view/>
 </template>
 
@@ -15,15 +17,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   setup () {
     return {
-      message: "Hello Vue!"
     }
   }
 })
 </script>
 
 <style scoped>
-p {
-  font-size: 2em;
-  text-align: center;
-}
 </style>

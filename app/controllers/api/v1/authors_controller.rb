@@ -7,7 +7,7 @@ class Api::V1::AuthorsController < Api::V1::BaseController
 
   def index
     authors = Author.all.select(:id, :name)
-    render json: authors
+    render json: { authors: authors }
   end
 
   private
