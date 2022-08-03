@@ -8,8 +8,8 @@
       </div>
       <div class="field">
         <label>著者</label>
-        <select name="author_id">
-          <option v-for="author in state.authors" v-bind:value="author.id">{{author.name}}</option>
+        <select v-model="state.author_id">
+          <option v-for="author in state.authors" :value="author.id" :key="author.id">{{author.name}}</option>
         </select>
       </div>
       <button type="submit">登録する</button>
@@ -23,7 +23,7 @@ import axios from 'axios';
 export default defineComponent({
   name: "register book",
   setup(_props) {
-    const state = reactive({ title: '', authors: [] });
+    const state = reactive({ title: '', authors: [], author_id: 0 });
 
     axios
       .get('/api/v1/authors/')
@@ -34,10 +34,11 @@ export default defineComponent({
 
     const onSubmit = () => {
       console.log('book title:', state.title);
+      console.log('author id:', state.author_id);
       axios
         .post('/api/v1/books',{
           title: state.title,
-          author_id: 1
+          author_id: state.author_id
         })
         .then(function (response) {
           console.log(response.data);
