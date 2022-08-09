@@ -13,8 +13,10 @@ Rails.application.routes.draw do
     namespace 'v1' do
       resources :users
 
-      resources :books, only: [:create]
+      resources :books, only: [:create, :index]
       resources :authors, only: [:create, :index]
+      resources :rentals, only: [:create, :index]
+      put '/rentals/return', to: 'rentals#return_books'
     end
   end
 
