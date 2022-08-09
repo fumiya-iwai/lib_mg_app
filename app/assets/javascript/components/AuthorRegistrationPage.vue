@@ -42,7 +42,7 @@ export default defineComponent({
 
     const validateAuthorName = () => {
       state.errors = (state.name.length > 0) ? {} : { name: ["著者名を入力してください。"] };
-      state.validate = (state.errors === {});
+      state.validate = (state.name.length > 0);
     }
 
     return {
