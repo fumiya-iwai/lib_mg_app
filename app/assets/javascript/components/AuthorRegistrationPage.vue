@@ -20,7 +20,7 @@ import axios from 'axios';
 export default defineComponent({
   name: "register author",
   setup(_props) {
-    const state = reactive({ name: '', validate: false, errors: '' });
+    const state = reactive({ name: '', validate: false, errors: {} });
 
     const onSubmit = () => {
       console.log('author name:', state.name);
@@ -30,6 +30,8 @@ export default defineComponent({
         })
         .then(function (response) {
           console.log(response.data);
+          state.name = '';
+          // todo: 「登録しました」のメッセージを出したい
         })
         .catch(error => {
           if (error.response.data && error.response.data.errors) {
@@ -39,7 +41,8 @@ export default defineComponent({
     }
 
     const validateAuthorName = () => {
-      state.validate = state.name.length > 0;
+      state.errors = (state.name.length > 0) ? {} : { name: ["著者名を入力してください。"] };
+      state.validate = (state.errors === {});
     }
 
     return {
