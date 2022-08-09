@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     namespace 'v1' do
       resources :users
 
-      resources :books, only: [:create]
+      resources :books, only: [:create, :index]
       resources :authors, only: [:create, :index]
     end
   end
