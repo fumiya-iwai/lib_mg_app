@@ -1,4 +1,6 @@
 class Api::V1::BaseController < ActionController::Base
+  include Authenticate
+
   skip_before_action :verify_authenticity_token
 
   rescue_from StandardError, with: :standard_error
