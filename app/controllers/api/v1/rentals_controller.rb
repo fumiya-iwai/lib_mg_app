@@ -5,9 +5,8 @@ class Api::V1::RentalsController < Api::V1::BaseController
 
     ActiveRecord::Base.transaction do
       rentals_params[:book_ids].each do |book_id|
-        # TODO: ログインユーザのIDにする
         Rental.create!(book_id:               book_id,
-                       user_id:               1,
+                       user_id:               current_user.id,
                        rented_date:           today,
                        scheduled_return_date: today + 7.days)
       end
@@ -18,7 +17,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
 
   def index
     rentals = Rental.renting_now
-                    .where(user_id: 1) # TODO: ログインユーザのIDにする
+                    .where(user_id: current_user.id)
 
     if params[:search_text]
       rentals = rentals.joins(:book).merge(Book.search_text(params[:search_text]))
@@ -36,7 +35,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
 
   def return_books
     rentals = Rental.renting_now
-                    .where(id: return_books_params[:rental_ids], user_id: 1) # TODO: ログインユーザのIDにする
+                    .where(id: return_books_params[:rental_ids], user_id: current_user.id)
     rentals.update_all(returned_date: Date.current)
 
     render json: { status: 'success' }, status: :no_content
