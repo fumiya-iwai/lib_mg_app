@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
       resources :books, only: [:create, :index]
       resources :authors, only: [:create, :index]
-      resources :rentals, only: [:create]
+      resources :rentals, only: [:create, :index]
     end
   end
 
