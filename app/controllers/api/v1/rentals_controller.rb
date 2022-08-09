@@ -34,6 +34,14 @@ class Api::V1::RentalsController < Api::V1::BaseController
     render json: to_api_response(rentals)
   end
 
+  def return_books
+    rentals = Rental.renting_now
+                    .where(id: return_books_params[:rental_ids], user_id: 1) # TODO: ログインユーザのIDにする
+    rentals.update_all(returned_date: Date.current)
+
+    render json: { status: 'success' }, status: :no_content
+  end
+
   private
 
   def rentals_params
@@ -42,6 +50,14 @@ class Api::V1::RentalsController < Api::V1::BaseController
     # params.require(:rental).permit(
     res = params.permit(:book_ids)
     res[:book_ids] = res[:book_ids].split(',')
+
+    res
+  end
+
+  def return_books_params
+    # TODO: require(:rental) っている？なしでいいのでは？
+    res = params.permit(:rental_ids)
+    res[:rental_ids] = res[:rental_ids].split(',')
 
     res
   end
