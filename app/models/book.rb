@@ -2,7 +2,7 @@ class Book < ApplicationRecord
   validates :title, presence: true, length: { maximum: 50 }
 
   belongs_to :author
-  has_many :rental
+  has_many :rentals
 
   scope :rentable, -> {
     book_ids = Rental.renting_now.pluck(:book_id)
