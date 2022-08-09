@@ -1,0 +1,30 @@
+ja:
+  activerecord:
+    # モデル名
+    models:
+      author: "著者"
+      book: "図書"
+      rental: "貸出"
+      user: "ユーザ"
+
+
+    # モデルの属性名
+    attributes:
+      author:
+        name: "著者名"
+
+      book:
+        title: "タイトル"
+        author_id: "著者"
+
+    # モデルの列挙名
+    enums:
+
+    # モデルで定義したvalidate error
+    # 未使用。
+    errors:
+      models:
+        book:
+          attributes:
+            author:
+              required: "著者を選択してください。"
