@@ -16,7 +16,9 @@
 import { createApp } from 'vue'
 import App from '../components/App.vue'
 import router from '../config/router'
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 
 document.addEventListener('DOMContentLoaded', () => {
-  createApp(App).use(router).mount('#app')
+  createApp(App).use(router).use(Antd).mount('#app')
 })
