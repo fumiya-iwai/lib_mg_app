@@ -6,5 +6,3 @@ rm -f /intern-2022/tmp/pids/server.pid
 
 # DockerfileのCMDにセットしたすべての引数を実行する
 exec "$@"
-
-/intern-2022/bin/webpack-dev-server
