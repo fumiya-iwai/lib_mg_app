@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomePage from '../components/HomePage.vue'
 import AuthorRegistrationPage from '../components/AuthorRegistrationPage.vue'
 import BookRegistrationPage from '../components/BookRegistrationPage.vue'
 import BookListPage from '../components/BookListPage.vue'
