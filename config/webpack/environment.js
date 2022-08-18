@@ -6,6 +6,9 @@ const vue = require('./loaders/vue')
 environment.plugins.prepend('VueLoaderPlugin', new VueLoaderPlugin())
 environment.loaders.prepend('vue', vue)
 
+// コンパイルを高速化するため
+environment.splitChunks()
+
 environment.plugins.prepend(
   'Define',
   new DefinePlugin({

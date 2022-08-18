@@ -13,7 +13,7 @@ application up and running.
 ## Docker Build
 ```sh
 docker-compose build
-docker-compose run web rails db:create
+docker-compose run rails rails db:create
 docker-compose up -d
 ```
 
