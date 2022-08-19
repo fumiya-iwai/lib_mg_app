@@ -5,19 +5,9 @@
     <button @click="search(state.searchText, 1)">検索！</button>
   </div>
   <div>
-    <div  style="height: 300px">
-      <table>
-        <tr>
-          <th><input type="checkbox" @change="allChange()" v-model="state.allChecked"></th>
-          <th>タイトル</th>
-          <th>著者</th>
-        </tr>
-        <tr v-for="book in state.books" >
-          <td><input type="checkbox" :value="book.id" v-model="state.selectedBookIds" ></td>
-          <td>{{ book.title }}</td>
-          <td>{{ book.author_name }}</td>
-        </tr>
-      </table>
+    <div  style="height: 620px">
+<!--      <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="pagination" />-->
+      <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="false"/>
     </div>
     <div>
       <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
@@ -27,15 +17,6 @@
     </div>
   </div>
 </template>
-
-<style>
-table {
-  border-collapse: collapse;
-}
-th, td {
-  border: 1px solid #333;
-}
-</style>
 
 <script>
 import { defineComponent, reactive } from 'vue'
@@ -53,6 +34,18 @@ export default defineComponent({
       allChecked: false
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
+    const columns = [
+      {
+        title: 'タイトル',
+        dataIndex: 'title',
+        key: 'title',
+      },
+      {
+        title: '著者',
+        dataIndex: 'author_name',
+        key: 'authorName',
+      },
+    ];
 
     const search = (searchText, page = 1) => {
       let offset = (page - 1) * ROWS_PER_PAGE
@@ -89,13 +82,16 @@ export default defineComponent({
       search(lastSearchText, page);
     };
 
-    const allChange = () => {
-      if (state.allChecked) {
-        state.selectedBookIds = state.books.map(book => book.id);
-      } else {
-        state.selectedBookIds = [];
-      }
-    }
+    const onSelectChange = (selectedRowKeys) => {
+      state.selectedBookIds = selectedRowKeys;
+    };
+
+    // const pagination =  reactive({
+    //   position: ['bottomLeft'],
+    //   total: state.totalBooks,
+    //   change: changePage,
+    //   hideOnSinglePage: true
+    // });
 
     // 初期リスト作成
     search();
@@ -105,7 +101,9 @@ export default defineComponent({
       rentBooks,
       search,
       changePage,
-      allChange,
+      columns,
+      onSelectChange,
+      // pagination,
     }
   }
 })
