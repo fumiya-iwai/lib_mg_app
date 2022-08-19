@@ -3,40 +3,71 @@
 
   <a-card>
     <a-form
+      ref="formRef"
+      name="authorRegistration"
+      hide-required-mark="true"
       :model="formState"
-      name="author"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 8 }"
-      @submit.prevent="onSubmit"
+      :rules="rules"
+      v-bind="layout"
+      @validate="handleValidate"
+      @submit="onSubmit"
     >
       <a-form-item
+        has-feedback
         label="著者名"
         name="name"
-        :rules="[{ required: true, message: '著者名を入力してください。'}]"
       >
-        <a-input v-model:value="formState.name" @input="validateAuthorName" />
-<!--        <p v-if="!!formState.errors['name']" class="error" style="color: red;">{{ formState.errors['name'].join("\n") }}</p>-->
+        <a-input v-model:value="formState.name" autocomplete="off" />
       </a-form-item>
 
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit" :disabled="formState.validate === false">登録する</a-button>
+      <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
+        <a-button type="primary" html-type="submit" :disabled="!formState.validate">登録する</a-button>
       </a-form-item>
     </a-form>
   </a-card>
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 export default defineComponent({
-  name: "register author",
-  setup(_props) {
+  name: "registerAuthor",
+  setup() {
+    const formRef = ref();
     const formState = reactive({
       name: '',
-      validate: false,
-      errors: {}
+      validate: false
     });
+
+    let validateName = async (_rules, value) => {
+      if (!value) {
+        return Promise.reject('著者名を入力してください。');
+      }
+      return Promise.resolve();
+    }
+
+    const rules = {
+      name: [{
+        required: true,
+        validator: validateName,
+        trigger: 'change',
+      }]
+    };
+
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 8
+      }
+    };
+
+    const handleValidate = (name, status, errorMessage) => {
+      formState.validate = status;
+    };
 
     const onSubmit = () => {
       console.log('author name:', formState.name);
@@ -46,25 +77,23 @@ export default defineComponent({
         })
         .then(function (response) {
           console.log(response.data);
-          formState.name = '';
-          // todo: 「登録しました」のメッセージを出したい
+          formRef.value.resetFields();
+          formState.validate = false;
+          message.success('著者の登録が完了しました。', 3);
         })
         .catch(error => {
-          if (error.response.data && error.response.data.errors) {
-            formState.errors = error.response.data.errors;
-          }
+          console.log(error.data);
+          message.error('著者の登録が失敗しました。', 3);
         });
     }
 
-    const validateAuthorName = () => {
-      formState.errors = (formState.name.length > 0) ? {} : { name: ["著者名を入力してください。"] };
-      formState.validate = (formState.name.length > 0);
-    }
-
     return {
+      formRef,
       formState,
+      rules,
+      layout,
+      handleValidate,
       onSubmit,
-      validateAuthorName
     }
   }
 })
