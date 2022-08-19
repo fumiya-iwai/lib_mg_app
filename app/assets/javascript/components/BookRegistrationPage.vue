@@ -1,79 +1,163 @@
 <template>
-  <h1>図書登録</h1>
-  <div class="input-form">
-    <form @submit.prevent="onSubmit">
-      <div class="field">
-        <label>タイトル</label>
-        <input v-model="state.title" @input="validateBookTitle" type="text">
-        <p v-if="!!state.errors['title']" class="error" style="color: red;">{{ state.errors['title'].join("\n")}}</p>
-      </div>
-      <div class="field">
-        <label>著者</label>
-        <select v-model="state.author_id" @change="validateAuthor">
-          <option v-for="author in state.authors" :value="author.id" :key="author.id">{{author.name}}</option>
-        </select>
-        <p v-if="!!state.errors['author']" class="error" style="color: red;">{{ state.errors['author'].join("\n")}}</p>
-      </div>
-      <button type="submit" :disabled="state.validate === false">登録する</button>
-    </form>
-  </div>
+  <a-typography-title :level="2">図書登録</a-typography-title>
+  <a-card>
+    <a-form
+      ref="formRef"
+      name="bookRegistration"
+      hide-required-mark="true"
+      :model="formState"
+      :rules="rules"
+      v-bind="layout"
+      @validate="handleValidate"
+      @submit.prevent="onSubmit"
+    >
+
+      <a-form-item
+        has-feedback
+        label="タイトル"
+        name="title"
+      >
+        <a-input v-model:value="formState.title" autocomplete="off" />
+      </a-form-item>
+
+      <a-form-item
+        has-feedback
+        label="著者"
+        name="author_id"
+      >
+        <a-select v-model:value="formState.author_id" :options="authors">
+        </a-select>
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
+        <a-button type="primary" html-type="submit" :disabled="!formState.validate">登録する</a-button>
+      </a-form-item>
+
+    </a-form>
+  </a-card>
 </template>
 <script>
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 export default defineComponent({
-  name: "register book",
-  setup(_props) {
-    const state = reactive({ title: '', authors: [], author_id: 0, validate: false, errors: {} });
+  name: "registerBook",
+  setup() {
+    const formRef = ref();
+    const formState = reactive({
+      title: '',
+      author_id: '',
+      validate: false
+    });
+    const authors = reactive([]);
 
+    let validStatus = {
+      title: false,
+      author_id: false
+    };
+
+    // 著者を取得する
     axios
       .get('/api/v1/authors/')
       .then(function (response) {
         console.log(response.data);
-        state.authors = response.data.authors
+        response.data.authors.forEach(function(author) {
+          authors.push({
+            value: author.id,
+            label: author.name
+          })
+        });
       })
+      .catch(error => {
+        console.log(error.data);
+        message.error('著者の取得に失敗しました。', 3);
+      });
+
+    let validateTitle = async (_rules, value) => {
+      if (!value) {
+        return Promise.reject('タイトルを入力してください。');
+      }
+      return Promise.resolve();
+    };
+
+    let validateAuthorId = async (_rules, value) => {
+      if (!value) {
+        return Promise.reject('著者を選択してください。');
+      }
+      return Promise.resolve();
+    };
+
+    const rules = {
+      title: [{
+        required: true,
+        validator: validateTitle,
+        trigger: 'change',
+      }],
+      author_id: [{
+        required: true,
+        validator: validateAuthorId,
+        trigger: 'change',
+      }],
+    };
+
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 8
+      }
+    };
+
+    const handleValidate = (name, status, errorMessage) => {
+      updateValidate(name, status);
+    };
+
+    let updateValidate = (name, status) => {
+      validStatus[name] = status;
+
+      formState.validate = true;
+      for (let key in validStatus) {
+        formState.validate &&= validStatus[key];
+      }
+    };
+
+    let initValidate = () => {
+      for (let key in validStatus) {
+        validStatus[key] = false;
+      }
+      formState.validate = false;
+    }
 
     const onSubmit = () => {
-      console.log('book title:', state.title);
-      console.log('author id:', state.author_id);
+      console.log('book title:', formState.title);
+      console.log('author id:', formState.author_id);
       axios
         .post('/api/v1/books',{
-          title: state.title,
-          author_id: state.author_id
+          title: formState.title,
+          author_id: formState.author_id
         })
         .then(function (response) {
           console.log(response.data);
-          state.title = '';
-          state.author_id = 0;
-          // todo: 「登録しました」のメッセージを出したい
+          formRef.value.resetFields();
+          initValidate();
+          message.success('図書の登録が完了しました。', 3);
         })
         .catch(error => {
-          if (error.response.data && error.response.data.errors) {
-            state.errors = error.response.data.errors;
-          }
+          console.log(error.data);
+          message.error('図書の登録が失敗しました。', 3);
         });
     };
 
-    const updateValidate = () => {
-      state.validate = (state.title.length > 0 && state.author_id > 0);
-    };
-
-    const validateBookTitle = () => {
-      state.errors['title'] = (state.title.length > 0) ? [] : ["タイトルを入力してください。"];
-      updateValidate();
-    };
-
-    const validateAuthor = () => {
-      state.errors['author'] = (state.author_id > 0) ? [] : ["著者を選択してください。"];
-      updateValidate();
-    };
-
     return {
-      state,
+      formRef,
+      formState,
+      rules,
+      layout,
+      handleValidate,
+      authors,
       onSubmit,
-      validateBookTitle,
-      validateAuthor
     }
   }
 })
