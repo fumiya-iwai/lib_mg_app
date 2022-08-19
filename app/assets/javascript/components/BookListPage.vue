@@ -1,21 +1,23 @@
 <template>
-  <h1>図書一覧</h1>
-  <div>
-    <input v-model="state.searchText" type="text">
-    <button @click="search(state.searchText, 1)">検索！</button>
-  </div>
-  <div>
-    <div  style="height: 620px">
-<!--      <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="pagination" />-->
-      <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="false"/>
-    </div>
-    <div>
-      <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
-    </div>
-    <div>
-      <button @click="rentBooks()">借りる</button>
-    </div>
-  </div>
+
+  <a-row type="flex" justify="space-between">
+    <a-typography-title :level="2">図書一覧</a-typography-title>
+    <a-input-search
+      v-model:value="state.searchText"
+      placeholder="キーワードで検索"
+      enter-button
+      @search="search(state.searchText, 1)"
+      style="width: 300px"
+    />
+  </a-row>
+
+<!--  <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="pagination" />-->
+  <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="false"/>
+
+  <a-row type="flex" justify="space-between" style="margin: 20px">
+    <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
+    <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">借りる</a-button>
+  </a-row>
 </template>
 
 <script>
