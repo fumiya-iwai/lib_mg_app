@@ -37,12 +37,12 @@
 </template>
 
 <style>
-table {
-  border-collapse: collapse;
-}
-th, td {
-  border: 1px solid #333;
-}
+/*table {*/
+/*  border-collapse: collapse;*/
+/*}*/
+/*th, td {*/
+/*  border: 1px solid #333;*/
+/*}*/
 </style>
 
 <script>
