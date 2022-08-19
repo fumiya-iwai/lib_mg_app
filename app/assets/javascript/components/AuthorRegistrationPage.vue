@@ -1,16 +1,28 @@
 <template>
-  <h1>著者登録</h1>
+  <a-typography-title :level="2">著者登録</a-typography-title>
 
-  <div class="input-form">
-    <form @submit.prevent="onSubmit">
-      <div class="field">
-        <label>著者名</label>
-        <input v-model="state.name" @input="validateAuthorName" type="text">
-        <p v-if="!!state.errors['name']" class="error" style="color: red;">{{ state.errors['name'].join("\n") }}</p>
-      </div>
-      <button type="submit" :disabled="state.validate === false">登録する</button>
-    </form>
-  </div>
+  <a-card>
+    <a-form
+      :model="formState"
+      name="author"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 8 }"
+      @submit.prevent="onSubmit"
+    >
+      <a-form-item
+        label="著者名"
+        name="name"
+        :rules="[{ required: true, message: '著者名を入力してください。'}]"
+      >
+        <a-input v-model:value="formState.name" @input="validateAuthorName" />
+<!--        <p v-if="!!formState.errors['name']" class="error" style="color: red;">{{ formState.errors['name'].join("\n") }}</p>-->
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button type="primary" html-type="submit" :disabled="formState.validate === false">登録する</a-button>
+      </a-form-item>
+    </a-form>
+  </a-card>
 </template>
 
 <script>
@@ -20,33 +32,37 @@ import axios from 'axios';
 export default defineComponent({
   name: "register author",
   setup(_props) {
-    const state = reactive({ name: '', validate: false, errors: {} });
+    const formState = reactive({
+      name: '',
+      validate: false,
+      errors: {}
+    });
 
     const onSubmit = () => {
-      console.log('author name:', state.name);
+      console.log('author name:', formState.name);
       axios
         .post('/api/v1/authors',{
-          name: state.name
+          name: formState.name
         })
         .then(function (response) {
           console.log(response.data);
-          state.name = '';
+          formState.name = '';
           // todo: 「登録しました」のメッセージを出したい
         })
         .catch(error => {
           if (error.response.data && error.response.data.errors) {
-            state.errors = error.response.data.errors;
+            formState.errors = error.response.data.errors;
           }
         });
     }
 
     const validateAuthorName = () => {
-      state.errors = (state.name.length > 0) ? {} : { name: ["著者名を入力してください。"] };
-      state.validate = (state.name.length > 0);
+      formState.errors = (formState.name.length > 0) ? {} : { name: ["著者名を入力してください。"] };
+      formState.validate = (formState.name.length > 0);
     }
 
     return {
-      state,
+      formState,
       onSubmit,
       validateAuthorName
     }
