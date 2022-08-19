@@ -1,0 +1,16 @@
+html {
+  /*========= Primary Color =========*/
+  --ant-primary-color: #fa8c16;
+  --ant-primary-color-hover: #ffa940;
+  --ant-primary-color-active: #d46b08;
+  --ant-primary-color-outline: rgba(250, 140, 22, 0.2);
+
+  /*Legacy*/
+  --ant-primary-1: #fff7e6;
+  --ant-primary-2: #ffe7ba;
+  --ant-primary-3: #ffd591;
+  --ant-primary-4: #ffc069;
+  --ant-primary-5: #ffa940;
+  --ant-primary-6: #fa8c16;
+  --ant-primary-7: #d46b08;
+}
