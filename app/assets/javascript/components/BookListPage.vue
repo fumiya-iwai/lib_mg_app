@@ -77,7 +77,7 @@ export default defineComponent({
 
     const rentBooks = () => {
       axios
-        .post('/api/v1/rentals',{
+        .post('/api/v1/rentals/',{
           book_ids: state.selectedBookIds.join(','),
         })
         .then(function () {
