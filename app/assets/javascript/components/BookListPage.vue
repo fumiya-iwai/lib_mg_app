@@ -5,7 +5,7 @@
     <button @click="search(state.searchText, 1)">検索！</button>
   </div>
   <div>
-    <div  style="height:250px">
+    <div  style="height: 300px">
       <table>
         <tr>
           <th><input type="checkbox" @change="allChange()" v-model="state.allChecked"></th>
@@ -19,14 +19,8 @@
         </tr>
       </table>
     </div>
-    <div style="display: flex; flex-direction: row;">
-      <div style="margin-right: 3px;"><button :disabled="state.currentPage === 1" @click="search(state.lastSearchText, state.currentPage - 1)">＜</button></div>
-      <div style="margin-right: 3px;" v-for="n in state.maxPage">
-        <button :disabled="state.currentPage === n" @click="search(state.lastSearchText, n)">
-          {{ n }}
-        </button>
-      </div>
-      <div style="margin-right: 3px;"><button :disabled="state.currentPage === state.maxPage" @click="search(state.lastSearchText, state.currentPage + 1)">＞</button></div>
+    <div>
+      <a-pagination :total="state.totalBooks" @change="changePage"/>
     </div>
     <div>
       <button @click="rentBooks()">借りる</button>
@@ -50,8 +44,15 @@ import axios from 'axios';
 export default defineComponent({
   name: "book list",
   setup(_props) {
-    const state = reactive({ books: [], currentPage: 1, maxPage: 1, searchText: '', lastSearchText: '', selectedBookIds: [] ,allChecked: false}); // TODO: 型定義とかしておくべき？
-    const ROWS_PER_PAGE = 8;
+    const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
+    const state = reactive({
+      books: [],
+      totalBooks: 0,
+      searchText: '',
+      lastSearchText: '', // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
+      selectedBookIds: [] ,
+      allChecked: false
+    });
 
     const search = (searchText, page = 1) => {
       let offset = (page - 1) * ROWS_PER_PAGE
@@ -65,12 +66,12 @@ export default defineComponent({
           },
         })
         .then(function (response) {
+          state.books = response.data.data;
+          state.totalBooks = response.data.count;
+          state.lastSearchText = searchText;
+          // 検索後はチェックボックスの選択状態を初期化する
           state.allChecked = false;
           state.selectedBookIds = [];
-          state.lastSearchText = searchText;
-          state.currentPage = page;
-          state.books = response.data.data;
-          state.maxPage = Math.floor(response.data.count / ROWS_PER_PAGE) + 1;
         })
     }
 
@@ -83,6 +84,10 @@ export default defineComponent({
           search(state.lastSearchText);
         })
     }
+
+    const changePage = (page) => {
+      search(state.lastSearchText, page);
+    };
 
     const allChange = () => {
       if (state.allChecked) {
@@ -99,6 +104,7 @@ export default defineComponent({
       state,
       rentBooks,
       search,
+      changePage,
       allChange,
     }
   }
