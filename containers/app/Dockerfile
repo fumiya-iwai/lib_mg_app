@@ -27,7 +27,6 @@ RUN bundle install
 COPY . /intern-2022
 
 RUN yarn install --check-files
-RUN bundle exec rails webpacker:compile
 
 # コンテナ起動時に毎回実行するスクリプトを追加
 COPY containers/app/entrypoint.sh /usr/bin/
