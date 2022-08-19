@@ -49,10 +49,10 @@ export default defineComponent({
       books: [],
       totalBooks: 0,
       searchText: '',
-      lastSearchText: '', // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
       selectedBookIds: [] ,
       allChecked: false
     });
+    let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
     const search = (searchText, page = 1) => {
       let offset = (page - 1) * ROWS_PER_PAGE
@@ -68,7 +68,7 @@ export default defineComponent({
         .then(function (response) {
           state.books = response.data.data;
           state.totalBooks = response.data.count;
-          state.lastSearchText = searchText;
+          lastSearchText = searchText;
           // 検索後はチェックボックスの選択状態を初期化する
           state.allChecked = false;
           state.selectedBookIds = [];
@@ -81,12 +81,12 @@ export default defineComponent({
           book_ids: state.selectedBookIds.join(','),
         })
         .then(function () {
-          search(state.lastSearchText);
+          search(lastSearchText);
         })
     }
 
     const changePage = (page) => {
-      search(state.lastSearchText, page);
+      search(lastSearchText, page);
     };
 
     const allChange = () => {
