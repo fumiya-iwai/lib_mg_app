@@ -20,7 +20,7 @@
       </table>
     </div>
     <div>
-      <a-pagination :total="state.totalBooks" @change="changePage"/>
+      <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
     </div>
     <div>
       <button @click="rentBooks()">借りる</button>
