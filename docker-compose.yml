@@ -1,14 +1,19 @@
 version: '3'
 services:
-  rails:
+  rails: &rails
     container_name: intern-2022-rails
     build:
       context: .
-      dockerfile: containers/app/Dockerfile
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      dockerfile: containers/rails/Dockerfile
+      args:
+        - APP_ROOT=/intern-2022
+        - UID=${UID:-999}
+        - GID=${GID:-999}
+    command: containers/rails/entrypoint.sh
     volumes:
       - .:/intern-2022
       - bundle:/usr/local/bundle
+      - node_modules:/intern-2022/node_modules # node_modules
     environment:
       POSTGRES_HOST: db
       POSTGRES_USER: root
@@ -20,14 +25,9 @@ services:
       - db
 
   webpacker:
+    <<: *rails # railsから継承
     container_name: intern-2022-webpacker
-    build:
-      context: .
-      dockerfile: containers/app/Dockerfile
-    command: ./bin/webpack-dev-server
-    volumes:
-      - .:/intern-2022
-      - bundle:/usr/local/bundle
+    command: containers/webpacker/entrypoint.sh
     environment:
       WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
       WEBPACKER_DEV_SERVER_INLINE: "true"
@@ -50,3 +50,4 @@ services:
 volumes:
   db-data:
   bundle:
+  node_modules:
