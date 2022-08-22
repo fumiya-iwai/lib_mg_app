@@ -14,7 +14,7 @@
     </a-col>
   </a-row>
 
-  <base-table
+  <selectable-table
     :columns="COLUMNS"
     :data="state.books"
     :total="state.totalBooks"
@@ -26,18 +26,18 @@
         借りる
       </a-button>
     </template>
-  </base-table>
+  </selectable-table>
 </template>
 
 <script>
 import { defineComponent, reactive } from 'vue'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
-import baseTable from "./BaseTableComponent";
+import selectableTable from "./SelectableTableComponent";
 
 export default defineComponent({
   components: {
-    baseTable
+    selectableTable
   },
   setup(_props) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
