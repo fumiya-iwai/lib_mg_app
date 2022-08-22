@@ -15,14 +15,23 @@
     </a-col>
   </a-row>
 
-  <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="false"/>
+  <!-- a-table に自動で付与されるページネーション機能だと、全件を取得した前提でのページネーションとなる -->
+  <!-- ページネーション毎にAPIにアクセスする仕様に向いていないため、:pagination="false" とし、別に a-pagination を定義する -->
+  <a-table
+    :dataSource="state.books"
+    :columns="columns"
+    rowKey="id"
+    :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }"
+    :pagination="false"/>
 
   <a-row type="flex" justify="space-between" style="margin-top: 20px">
     <a-col>
       <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
     </a-col>
     <a-col>
-      <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">借りる</a-button>
+      <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">
+        借りる
+      </a-button>
     </a-col>
   </a-row>
 </template>
@@ -40,7 +49,6 @@ export default defineComponent({
       totalBooks: 0,
       searchText: '',
       selectedBookIds: [] ,
-      allChecked: false
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
     const columns = [
@@ -70,8 +78,11 @@ export default defineComponent({
         .then(function (response) {
           state.books = response.data.data;
           state.totalBooks = response.data.count;
+          // テキストボックスが変更された状態でページネーションされた場合を考慮し、
+          // 検索処理で使用された条件に上書きしておく
+          state.SearchText = searchText;
           lastSearchText = searchText;
-          // 検索後はチェックボックスの選択状態を初期化する
+          // 検索後はチェックボックスの選択状態を初期化する（ページを跨いで選択させない）
           state.allChecked = false;
           state.selectedBookIds = [];
         })
@@ -83,7 +94,7 @@ export default defineComponent({
           book_ids: state.selectedBookIds.join(','),
         })
         .then(function () {
-          search(lastSearchText);
+          search(lastSearchText, 1);
         })
     }
 
