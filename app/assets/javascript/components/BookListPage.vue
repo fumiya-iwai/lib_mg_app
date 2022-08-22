@@ -14,44 +14,34 @@
     </a-col>
   </a-row>
 
-  <!-- a-table に自動で付与されるページネーション機能だと、全件を取得した前提でのページネーションとなる -->
-  <!-- ページネーション毎にAPIにアクセスする仕様に向いていないため、:pagination="false" とし、別に a-pagination を定義する -->
-  <a-table
-    :dataSource="state.books"
-    :columns="columns"
-    rowKey="id"
-    :row-selection="{ onChange: onSelectChange }"
-    :pagination="false"/>
-
-  <a-row type="flex" justify="space-between" style="height: 100px; padding-top: 20px;">
-    <a-col>
-      <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
-    </a-col>
-    <a-col>
+  <base-table
+    :columns="COLUMNS"
+    :data="state.books"
+    :total="state.totalBooks"
+    :selectedRowKeys="state.selectedBookIds"
+    @onChangePage="changePage($event)"
+    @onChangeSelection="updateSelections($event)">
+    <template v-slot:actionArea>
       <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">
         借りる
       </a-button>
-    </a-col>
-  </a-row>
+    </template>
+  </base-table>
 </template>
 
 <script>
 import { defineComponent, reactive } from 'vue'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
+import baseTable from "./BaseTableComponent";
 
 export default defineComponent({
-  name: "book list",
+  components: {
+    baseTable
+  },
   setup(_props) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
-    const state = reactive({
-      books: [],
-      totalBooks: 0,
-      searchText: '',
-      selectedBookIds: [] ,
-    });
-    let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
-    const columns = [
+    const COLUMNS = [
       {
         title: 'タイトル',
         dataIndex: 'title',
@@ -62,6 +52,14 @@ export default defineComponent({
         width: '200px',
       },
     ];
+
+    const state = reactive({
+      books: [],
+      totalBooks: 0,
+      searchText: '',
+      selectedBookIds: [] ,
+    });
+    let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
     const search = (searchText, page = 1) => {
       let offset = (page - 1) * ROWS_PER_PAGE
@@ -104,7 +102,7 @@ export default defineComponent({
       search(lastSearchText, page);
     };
 
-    const onSelectChange = (selectedRowKeys) => {
+    const updateSelections = (selectedRowKeys) => {
       state.selectedBookIds = selectedRowKeys;
     };
 
@@ -112,12 +110,12 @@ export default defineComponent({
     search('', 1);
 
     return {
+      COLUMNS,
       state,
-      columns,
       search,
       rentBooks,
       changePage,
-      onSelectChange,
+      updateSelections,
     }
   }
 })
