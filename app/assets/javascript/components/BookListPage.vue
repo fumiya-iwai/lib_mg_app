@@ -107,7 +107,7 @@ export default defineComponent({
     };
 
     // 初期リスト作成
-    search();
+    search('', 1);
 
     return {
       state,
