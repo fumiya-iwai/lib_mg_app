@@ -6,7 +6,8 @@
     :columns="$props.columns"
     :rowKey="$props.rowKey"
     :row-selection="{ selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
-    :pagination="false"/>
+    :pagination="false"
+    :scroll="{ x: 800 }"/>
 
   <a-row type="flex" justify="space-between" style="margin-top: 20px;">
     <a-col>

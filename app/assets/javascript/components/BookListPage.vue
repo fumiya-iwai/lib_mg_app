@@ -45,11 +45,13 @@ export default defineComponent({
       {
         title: 'タイトル',
         dataIndex: 'title',
+        ellipsis: true,
       },
       {
         title: '著者',
         dataIndex: 'author_name',
         width: '200px',
+        ellipsis: true,
       },
     ];
 
