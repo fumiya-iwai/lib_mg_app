@@ -10,7 +10,6 @@
         placeholder="キーワードで検索"
         enter-button
         @search="search(state.searchText, 1)"
-        style="width: 300px"
       />
     </a-col>
   </a-row>
@@ -24,7 +23,7 @@
     :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }"
     :pagination="false"/>
 
-  <a-row type="flex" justify="space-between" style="margin-top: 20px">
+  <a-row type="flex" justify="space-between" style="height: 100px; padding-top: 20px;">
     <a-col>
       <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
     </a-col>
