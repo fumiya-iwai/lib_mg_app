@@ -82,7 +82,6 @@ export default defineComponent({
           state.SearchText = searchText;
           lastSearchText = searchText;
           // 検索後はチェックボックスの選択状態を初期化する（ページを跨いで選択させない）
-          state.allChecked = false;
           state.selectedBookIds = [];
         })
     }
