@@ -6,7 +6,7 @@ class Api::V1::BooksController < Api::V1::BaseController
   end
 
   def index
-    books = Book.all
+    books = Book.all.order(id: :desc)
 
     if params[:rentable]
       books = books.rentable

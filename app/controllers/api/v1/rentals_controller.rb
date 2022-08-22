@@ -18,6 +18,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
   def index
     rentals = Rental.renting_now
                     .where(user_id: current_user.id)
+                    .order(rented_date: :asc, id: :asc)
 
     if params[:search_text]
       rentals = rentals.joins(:book).merge(Book.search_text(params[:search_text]))
