@@ -11,7 +11,6 @@
     />
   </a-row>
 
-<!--  <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="pagination" />-->
   <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="false"/>
 
   <a-row type="flex" justify="space-between" style="margin: 20px">
@@ -88,13 +87,6 @@ export default defineComponent({
       state.selectedBookIds = selectedRowKeys;
     };
 
-    // const pagination =  reactive({
-    //   position: ['bottomLeft'],
-    //   total: state.totalBooks,
-    //   change: changePage,
-    //   hideOnSinglePage: true
-    // });
-
     // 初期リスト作成
     search();
 
@@ -105,7 +97,6 @@ export default defineComponent({
       changePage,
       columns,
       onSelectChange,
-      // pagination,
     }
   }
 })
