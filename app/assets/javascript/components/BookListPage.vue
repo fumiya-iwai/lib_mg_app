@@ -20,7 +20,7 @@
     :dataSource="state.books"
     :columns="columns"
     rowKey="id"
-    :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }"
+    :row-selection="{ onChange: onSelectChange }"
     :pagination="false"/>
 
   <a-row type="flex" justify="space-between" style="height: 100px; padding-top: 20px;">

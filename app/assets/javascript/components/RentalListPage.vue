@@ -19,7 +19,7 @@
     :dataSource="state.rentals"
     :columns="columns"
     rowKey="id"
-    :row-selection="{ selectedRowKeys: state.selectedRentalIds, onChange: onSelectChange }"
+    :row-selection="{ onChange: onSelectChange }"
     :pagination="false"/>
 
   <a-row type="flex" justify="space-between" style="height: 100px; padding-top: 20px;">
