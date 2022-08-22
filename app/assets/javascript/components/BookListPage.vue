@@ -55,12 +55,12 @@ export default defineComponent({
       {
         title: 'タイトル',
         dataIndex: 'title',
-        key: 'title',
+        width: '75%',
       },
       {
         title: '著者',
         dataIndex: 'author_name',
-        key: 'authorName',
+        width: '25%',
       },
     ];
 
