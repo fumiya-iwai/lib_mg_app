@@ -1,21 +1,29 @@
 <template>
 
   <a-row type="flex" justify="space-between">
-    <a-typography-title :level="2">図書一覧</a-typography-title>
-    <a-input-search
-      v-model:value="state.searchText"
-      placeholder="キーワードで検索"
-      enter-button
-      @search="search(state.searchText, 1)"
-      style="width: 300px"
-    />
+    <a-col>
+      <a-typography-title :level="2">図書一覧</a-typography-title>
+    </a-col>
+    <a-col>
+      <a-input-search
+        v-model:value="state.searchText"
+        placeholder="キーワードで検索"
+        enter-button
+        @search="search(state.searchText, 1)"
+        style="width: 300px"
+      />
+    </a-col>
   </a-row>
 
   <a-table :dataSource="state.books" :columns="columns" rowKey="id" :row-selection="{ selectedRowKeys: state.selectedBookIds, onChange: onSelectChange }" :pagination="false"/>
 
-  <a-row type="flex" justify="space-between" style="margin: 20px">
-    <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
-    <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">借りる</a-button>
+  <a-row type="flex" justify="space-between" style="margin-top: 20px">
+    <a-col>
+      <a-pagination :total="state.totalBooks" @change="changePage" :hideOnSinglePage="true"/>
+    </a-col>
+    <a-col>
+      <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">借りる</a-button>
+    </a-col>
   </a-row>
 </template>
 
