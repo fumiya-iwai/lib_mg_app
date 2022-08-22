@@ -114,10 +114,10 @@ export default defineComponent({
 
     return {
       state,
-      rentBooks,
-      search,
-      changePage,
       columns,
+      search,
+      rentBooks,
+      changePage,
       onSelectChange,
     }
   }
