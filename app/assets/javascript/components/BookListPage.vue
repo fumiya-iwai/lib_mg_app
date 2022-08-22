@@ -38,6 +38,7 @@
 <script>
 import { defineComponent, reactive } from 'vue'
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: "book list",
@@ -92,7 +93,11 @@ export default defineComponent({
           book_ids: state.selectedBookIds.join(','),
         })
         .then(function () {
+          message.success(`${state.selectedBookIds.length}冊の本を借りました。`, 3);
           search(lastSearchText, 1);
+        })
+        .catch(function (error) {
+          message.error(error.response.data.error, 3)
         })
     }
 
