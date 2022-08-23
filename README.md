@@ -6,8 +6,10 @@ application up and running.
 ### 0.初期設定
 - slack に参加
 - PC ⇄ github の ssh 設定
+  - sshの設定については、intern-2022/doc/ssh_settings.md を参照
 
 ### 1. Docker Desktop を用意する
+- Windowsの場合の導入方法については、intern-2022/doc/settings_for_windows.md を参照
 
 ### 2. Gitリポジトリのクローン
 ```text
