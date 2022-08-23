@@ -1,5 +1,5 @@
 <template>
-  <a-layout id="app-layout" style="height: 100%; background: #fff;">
+  <a-layout id="app-layout" style="height: 100%; background: #fff; min-width: 900px;">
     <a-layout-header style="background: #fff">
       <a-row type="flex">
         <a-col >
