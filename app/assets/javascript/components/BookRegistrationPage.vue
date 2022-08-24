@@ -68,10 +68,6 @@ export default defineComponent({
             label: author.name
           })
         });
-      })
-      .catch(error => {
-        console.log(error.data);
-        message.error('著者の取得に失敗しました。', 3);
       });
 
     let validateTitle = async (_rules, value) => {
@@ -143,10 +139,6 @@ export default defineComponent({
           formRef.value.resetFields();
           initValidate();
           message.success('図書の登録が完了しました。', 3);
-        })
-        .catch(error => {
-          console.log(error.data);
-          message.error('図書の登録が失敗しました。', 3);
         });
     };
 
