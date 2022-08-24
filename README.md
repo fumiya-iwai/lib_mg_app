@@ -10,10 +10,11 @@ application up and running.
 
 ### 1. Docker Desktop を用意する
 - Windowsの場合の導入方法については、intern-2022/doc/settings_for_windows.md を参照
+- Macの場合は https://www.docker.com/get-started/ よりダウンロード・インストールする。
 
 ### 2. Gitリポジトリのクローン
 ```text
-git clone git@github.com:ingage/intern-2022-<TEAM_NAME>.git
+git clone git@github.com:ingage/intern-2022.git
 cd intern-2022
  ```
 
