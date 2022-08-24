@@ -2,7 +2,7 @@ class Api::V1::AuthorsController < Api::V1::BaseController
 
   def create
     Author.new(authors_param).save!
-    render json: { status: 'success' }, status: :created
+    render json: '', status: :created
   end
 
   def index
