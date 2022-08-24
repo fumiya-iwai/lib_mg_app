@@ -3,8 +3,7 @@
     <a-layout-header style="background: #fff">
       <a-row type="flex">
         <a-col >
-          <!-- TODO: 画像に変更 -->
-          <div class="logo" style="  width: 120px; height: 31px; margin: 16px; background: orange;" />
+          <img src="~logo.svg" width="165">
         </a-col>
         <a-col flex="auto" justify="end">
           <a-row type="flex" justify="end">
@@ -31,6 +30,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import 'logo.svg';
 
 export default defineComponent({
   setup () {
