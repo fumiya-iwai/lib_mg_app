@@ -20,7 +20,7 @@ git config --global autocrlf input
 - コマンドプロンプトを開いて、ユーザーのホームディレクトリで以下のコマンドを実行する。
 ```
 mkdir .ssh #すでに存在していれば不要
-cd ssh
+cd .ssh
 ssh-keygen -f <キーの名前(任意)> -C "<コメント(任意)>"
 ```
 
