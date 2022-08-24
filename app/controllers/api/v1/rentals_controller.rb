@@ -12,7 +12,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
       end
     end
 
-    render json: { status: 'success' }, status: :created
+    render json: '', status: :created
   end
 
   def index
@@ -39,7 +39,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
                     .where(id: return_books_params[:rental_ids], user_id: current_user.id)
     rentals.update_all(returned_date: Date.current)
 
-    render json: { status: 'success' }, status: :no_content
+    render json: '', status: :no_content
   end
 
   private

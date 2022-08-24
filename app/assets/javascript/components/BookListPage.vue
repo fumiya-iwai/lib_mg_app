@@ -97,10 +97,7 @@ export default defineComponent({
         .then(function () {
           message.success(`${state.selectedBookIds.length}冊の本を借りました。`, 3);
           search(lastSearchText, 1);
-        })
-        .catch(function (error) {
-          message.error(error.response.data.error, 3)
-        })
+        });
     }
 
     const changePage = (page) => {

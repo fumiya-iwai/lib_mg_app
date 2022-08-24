@@ -2,7 +2,7 @@ class Api::V1::BooksController < Api::V1::BaseController
 
   def create
     Book.new(books_param).save!
-    render json: { status: 'success' }, status: :created
+    render json: '', status: :created
   end
 
   def index
