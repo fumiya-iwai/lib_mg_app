@@ -19,6 +19,7 @@
     :data="state.books"
     :total="state.totalBooks"
     :selectedRowKeys="state.selectedBookIds"
+    :currentPage="state.currentPage"
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)">
     <template v-slot:actionArea>
@@ -59,7 +60,8 @@ export default defineComponent({
       books: [],
       totalBooks: 0,
       searchText: '',
-      selectedBookIds: [] ,
+      selectedBookIds: [],
+      currentPage: 1,
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
@@ -77,6 +79,7 @@ export default defineComponent({
         .then(function (response) {
           state.books = response.data.data;
           state.totalBooks = response.data.count;
+          state.currentPage = page;
           // テキストボックスが変更された状態でページネーションされた場合を考慮し、
           // 検索処理で使用された条件に上書きしておく
           state.SearchText = searchText;
@@ -88,7 +91,7 @@ export default defineComponent({
 
     const rentBooks = () => {
       axios
-        .post('/api/v1/rentals//',{
+        .post('/api/v1/rentals/',{
           book_ids: state.selectedBookIds.join(','),
         })
         .then(function () {

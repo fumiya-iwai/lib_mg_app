@@ -11,7 +11,11 @@
 
   <a-row type="flex" justify="space-between" style="margin-top: 20px;">
     <a-col>
-      <a-pagination :total="$props.total" @change="$emit('onChangePage', $event)" :hideOnSinglePage="true"/>
+      <a-pagination
+        :current="$props.currentPage"
+        :total="$props.total"
+        :hideOnSinglePage="true"
+        @change="$emit('onChangePage', $event)"/>
     </a-col>
     <a-col>
       <slot name="actionArea"></slot>
@@ -26,6 +30,7 @@ export default defineComponent({
   props: {
     columns:         { type: Array,  required: true },
     data:            { type: Array,  required: true },
+    currentPage:     { type: Number, required: true },
     total:           { type: Number, required: true },
     rowKey:          { type: String, required: false, default: "id" },
     selectedRowKeys: { type: Array,  required: true },

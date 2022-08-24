@@ -18,6 +18,7 @@
     :data="state.rentals"
     :total="state.totalRentals"
     :selectedRowKeys="state.selectedRentalIds"
+    :currentPage="state.currentPage"
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)">
     <template v-slot:actionArea>
@@ -69,6 +70,7 @@ export default defineComponent({
       totalRentals: 0,
       searchText: '',
       selectedRentalIds: [],
+      currentPage: 1,
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
@@ -86,6 +88,7 @@ export default defineComponent({
         .then(function (response) {
           state.rentals = response.data.data;
           state.totalRentals = response.data.count;
+          state.currentPage = page;
           // テキストボックスが変更された状態でページネーションされた場合を考慮し、
           // 検索処理で使用された条件に上書きしておく
           state.SearchText = searchText;
