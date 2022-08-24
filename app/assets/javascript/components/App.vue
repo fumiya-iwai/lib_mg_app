@@ -17,6 +17,20 @@
             </a-col>
           </a-row>
         </a-col>
+        <a-col justify="end" style="margin-left: 24px">
+          <a-dropdown trigger="['click']">
+            <img src="~user.svg" width="40" style="cursor: pointer">
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <a href="/logout">
+                    ログアウト
+                  </a>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </a-col>
       </a-row>
     </a-layout-header>
     <a-divider style="height: 1px; background-color: #F0F0F0; margin: 0"/>
@@ -31,6 +45,7 @@
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import 'logo.svg';
+import 'user.svg';
 
 export default defineComponent({
   setup () {
