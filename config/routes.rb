@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
-  get '/', to: 'sessions#new'
-  get '/login', to: 'sessions#new'
-  post '/login', to: 'sessions#create'
-  get '/logout', to: 'sessions#destroy'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  # 
+  # 蔵書管理の本体
+  # 
+  get '/', to: 'main#index', as: 'main'
 
-  get 'main', to: 'main#index'
+  # 
+  # ログイン処理
+  # 
+  get  '/login',  to: 'sessions#new'
+  post '/login',  to: 'sessions#create'
+  get  '/logout', to: 'sessions#destroy'
 
   #
   # API
