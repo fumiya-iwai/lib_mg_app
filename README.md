@@ -34,9 +34,9 @@ docker-compose run --rm rails bash
 appコンテナ内で以下のコマンドを実行
 
 ```shell
-bin/rails db:create
-bin/rails db:schema:load
-bin/rails db:seed
+rails db:create
+rails db:schema:load
+rails db:seed
 exit
 ```
 
