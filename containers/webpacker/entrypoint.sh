@@ -1,4 +1,4 @@
 #!/bin/bash
 
 yarn install
-webpack-dev-server
+bin/webpack-dev-server
