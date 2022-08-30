@@ -34,7 +34,7 @@ ssh-keygen -f <キーの名前(任意)> -C "<コメント(任意)>"
 - intern_key.pubの中身をすべてコピーする。
 - .sshディレクトリの直下にconfigを作成し、以下のとおり記載する。
 ```
-Host gitub.com
+Host github.com
   User git
   IdentityFile ~/.ssh/intern_key
 ```
