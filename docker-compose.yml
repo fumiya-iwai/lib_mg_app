@@ -32,6 +32,7 @@ services:
       WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
       WEBPACKER_DEV_SERVER_INLINE: "true"
       WEBPACKER_DEV_SERVER_HMR: "false"
+      CHOKIDAR_USEPOLLING: "true"
     ports:
       - "3035:3035"
 
