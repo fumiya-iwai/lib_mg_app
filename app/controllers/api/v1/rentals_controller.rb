@@ -13,6 +13,9 @@ class Api::V1::RentalsController < Api::V1::BaseController
     end
 
     render json: '', status: :created
+    user = current_user
+    user.point += 1
+    user.save!
   end
 
   def index
@@ -40,6 +43,9 @@ class Api::V1::RentalsController < Api::V1::BaseController
     rentals.update_all(returned_date: Date.current)
 
     render json: '', status: :no_content
+    user = current_user
+    user.point += 1
+    user.save!
   end
 
   private

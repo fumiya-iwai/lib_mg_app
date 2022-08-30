@@ -17,13 +17,21 @@
             </a-col>
           </a-row>
         </a-col>
+        <a-col>
+        popppp
+        </a-col>
         <a-col justify="end" style="margin-left: 24px">
           <a-dropdown trigger="['click']">
             <img src="~user.svg" width="40" style="cursor: pointer">
             <template #overlay>
               <a-menu>
-                <a-menu-item>
-                  <a href="/logout">
+              <a-menu-item>
+                <a href="/#/rentals">
+                    貸出し中
+                  </a>
+                </a-menu-item>
+              <a-menu-item>
+                <a href="/logout">
                     ログアウト
                   </a>
                 </a-menu-item>
@@ -39,6 +47,7 @@
       <router-view/>
     </a-layout-content>
   </a-layout>
+  
 </template>
 
 <script>
@@ -51,9 +60,8 @@ export default defineComponent({
   setup () {
     const itemList = [
       { name: 'books', content: '図書一覧' },
-      { name: 'rentals', content: '貸出' },
       { name: 'book', content: '図書登録' },
-      { name: 'author', content: '著者登録' },
+      { name: 'author', content: '著者登録' }
     ]
     const current = ref([])
     const router = useRouter();
