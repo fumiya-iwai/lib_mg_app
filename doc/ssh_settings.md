@@ -13,7 +13,7 @@ git config --global user.email "<メールアドレス>"
 
 - Windowsの場合は以下のコマンドにより、git clone時の改行コードの設定もしておく。
 ```
-git config --global autocrlf input
+git config --global core.autocrlf input
 ```
 
 ## 3. 秘密鍵と公開鍵を作成する
