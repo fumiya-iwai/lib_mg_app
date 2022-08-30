@@ -29,6 +29,15 @@
         </a-select>
       </a-form-item>
 
+      <a-form-item
+        has-feedback
+        label="カテゴリー"
+        name="category_id"
+      >
+        <a-select v-model:value="formState.category_id" :options="categories">
+        </a-select>
+      </a-form-item>
+
       <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
         <a-button type="primary" html-type="submit" :disabled="!formState.validate">登録する</a-button>
       </a-form-item>
@@ -48,8 +57,20 @@ export default defineComponent({
     const formState = reactive({
       title: '',
       author_id: '',
+      category_id: '',
       validate: false
     });
+
+    const categories = reactive([]);
+
+    // カテゴリを取得する
+    categories.push({value: 1,label: "英語"},
+                    {value: 2,label: "数学"},
+                    {value: 3,label: "物理"},
+                    {value: 4,label: "化学"},
+                    {value: 5,label: "生物"},
+                    {value: 0,label: "その他"})
+
     const authors = reactive([]);
 
     let validStatus = {
@@ -132,7 +153,8 @@ export default defineComponent({
       axios
         .post('/api/v1/books',{
           title: formState.title,
-          author_id: formState.author_id
+          author_id: formState.author_id,
+          category_id: formState.category_id
         })
         .then(function (response) {
           console.log(response.data);
@@ -149,6 +171,7 @@ export default defineComponent({
       layout,
       handleValidate,
       authors,
+      categories,
       onSubmit,
     }
   }
