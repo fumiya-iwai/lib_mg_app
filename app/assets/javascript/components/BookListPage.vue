@@ -27,10 +27,11 @@
     :total="state.totalBooks"
     :selectedRowKeys="state.selectedBookIds"
     :currentPage="state.currentPage"
-    @rentableState="rowSelection($event)"><!--貸し出し中の書籍は選択できなくなる処理のイベント受け取り（仮）
-    SelectableTableCompornentのrentableStateを削除する際はここも削除すること-->
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)"><!--子コンポーネントのイベント受け取り(?)-->
+    <!-- @rentableState="rowSelection($event)"
+    貸し出し中の書籍は選択できなくなる処理のイベント受け取り（仮）
+    SelectableTableCompornentのrentableStateを削除する際はここも削除すること-->
     <template v-slot:actionArea>
       <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">
         借りる
@@ -114,11 +115,12 @@ export default defineComponent({//JSとVue.jsの境界
     const updateSelections = (selectedRowKeys) => {
       state.selectedBookIds = selectedRowKeys;//チェックされた行のBookId一覧を取得
     };
-    const rowSelection = {
+    /*const rowSelection = {
       getCheckboxProps: (record) =>({
         disabled: true,
       }),
     };
+    */
     const onChange = (e) =>{//チェックボックスがチェックされた
       if(e.target.checked){//貸し出し中を表示しないとき
         //console.log('checked, rentableOnlyFlg:%s', rentableOnlyFlg);//デバック用ログ

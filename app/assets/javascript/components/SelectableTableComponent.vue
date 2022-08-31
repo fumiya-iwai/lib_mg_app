@@ -44,13 +44,14 @@ export default defineComponent({
     };
     //貸し出し中の本を選択できなくする記述（実装方法検討中）
     //BookListPage側の都合で以下をコメントアウトすると正しく描画されない
-    const rentableState = ()=>{
+    /*const rentableState = ()=>{
       context.emit('rentableState')
     };
+    */
     
     return {
       onChangeSelection,
-      rentableState,
+      //rentableState,
     }
   }
 })
