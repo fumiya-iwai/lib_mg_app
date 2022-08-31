@@ -18,7 +18,7 @@
           </a-row>
         </a-col>
         <a-col>
-        popppp
+        pop
         </a-col>
         <a-col justify="end" style="margin-left: 24px">
           <a-dropdown trigger="['click']">
