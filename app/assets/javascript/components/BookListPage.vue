@@ -5,6 +5,13 @@
       <a-typography-title :level="2">図書一覧</a-typography-title>
     </a-col>
     <a-col>
+      <a-checkbox 
+      v-model:checked = "firstRentableFlg"
+      @change="onChange">
+        <a-typography-title :level="5">貸し出し中を表示しない</a-typography-title>
+      </a-checkbox>
+    </a-col>
+    <a-col>
       <a-input-search
         v-model:value="state.searchText"
         placeholder="キーワードで検索"
@@ -20,8 +27,10 @@
     :total="state.totalBooks"
     :selectedRowKeys="state.selectedBookIds"
     :currentPage="state.currentPage"
+    @rentableState="rowSelection($event)"><!--貸し出し中の書籍は選択できなくなる処理のイベント受け取り（仮）
+    SelectableTableCompornentのrentableStateを削除する際はここも削除すること-->
     @onChangePage="changePage($event)"
-    @onChangeSelection="updateSelections($event)">
+    @onChangeSelection="updateSelections($event)"><!--子コンポーネントのイベント受け取り(?)-->
     <template v-slot:actionArea>
       <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">
         借りる
@@ -31,12 +40,14 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import selectableTable from "./SelectableTableComponent";
-
-export default defineComponent({
+let rentableOnlyFlg = true
+let tmpPage = 1
+let tmpSearchText = ''
+export default defineComponent({//JSとVue.jsの境界
   components: {
     selectableTable
   },
@@ -44,38 +55,14 @@ export default defineComponent({
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
 
     const COLUMNS = [
-      {
-        title: 'タイトル',
-        dataIndex: 'title',
-        ellipsis: true,
-      },
-      {
-        title: 'カテゴリ',
-        dataIndex: 'category',
-        width: '200px',
-        ellipsis: true,
-      },
-      {
-        title: '著者',
-        dataIndex: 'author_name',
-        width: '200px',
-        ellipsis: true,
-      },
-      {
-        title: '貸し出し状況',
-        dataIndex: 'rentable',
-        width: '200px',
-        ellipsis: true,
-      },
-      {
-        title: '借主名',
-        dataIndex: 'author_name',
-        width: '200px',
-        ellipsis: true,
-      },
+      {title: 'タイトル',dataIndex: 'title',ellipsis: true,},
+      {title: 'カテゴリ',dataIndex: 'category_id',width: '200px',ellipsis: true,},
+      {title: '著者',dataIndex: 'author_name',width: '200px',ellipsis: true,},
+      {title: '貸し出し状況',dataIndex: 'rentable',width: '200px',ellipsis: true,},
+      {title: '借主名',dataIndex: 'user_name',width: '200px',ellipsis: true,},
     ];
 
-    const state = reactive({
+    const state = reactive({//変数初期値
       books: [],
       totalBooks: 0,
       searchText: '',
@@ -83,14 +70,13 @@ export default defineComponent({
       currentPage: 1,
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
-
     const search = (searchText, page = 1) => {
       let offset = (page - 1) * ROWS_PER_PAGE
       axios
         .get('/api/v1/books/',{
           params: {
             search_text: searchText,
-            rentable: false,
+            rentable: rentableOnlyFlg,
             limit: ROWS_PER_PAGE,
             offset: offset,
           },
@@ -99,6 +85,8 @@ export default defineComponent({
           state.books = response.data.data;
           state.totalBooks = response.data.count;
           state.currentPage = page;
+          tmpPage = page;
+          tmpSearchText = searchText;
           // テキストボックスが変更された状態でページネーションされた場合を考慮し、
           // 検索処理で使用された条件に上書きしておく
           state.SearchText = searchText;
@@ -124,7 +112,24 @@ export default defineComponent({
     };
 
     const updateSelections = (selectedRowKeys) => {
-      state.selectedBookIds = selectedRowKeys;
+      state.selectedBookIds = selectedRowKeys;//チェックされた行のBookId一覧を取得
+    };
+    const rowSelection = {
+      getCheckboxProps: (record) =>({
+        disabled: true,
+      }),
+    };
+    const onChange = (e) =>{//チェックボックスがチェックされた
+      if(e.target.checked){//貸し出し中を表示しないとき
+        //console.log('checked, rentableOnlyFlg:%s', rentableOnlyFlg);//デバック用ログ
+        rentableOnlyFlg = true;
+        search(tmpSearchText,tmpPage);
+      }
+      else{//貸し出し中を表示するとき
+        //console.log('unchecked');//デバック用ログ
+        rentableOnlyFlg = false;
+        search(tmpSearchText,tmpPage);
+      }
     };
 
     // 初期リスト作成
@@ -137,7 +142,11 @@ export default defineComponent({
       rentBooks,
       changePage,
       updateSelections,
+      onChange,
+      firstRentableFlg: ref(rentableOnlyFlg),
     }
-  }
+  },
+  
+  
 })
 </script>

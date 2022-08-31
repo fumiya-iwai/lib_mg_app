@@ -5,7 +5,7 @@
     :dataSource="$props.data"
     :columns="$props.columns"
     :rowKey="$props.rowKey"
-    :row-selection="{ selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
+    :row-selection="{selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
     :pagination="false"
     :scroll="{ x: 800 }"/>
 
@@ -27,6 +27,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  //親コンポーネントからのデータ受け取り
   props: {
     columns:         { type: Array,  required: true },
     data:            { type: Array,  required: true },
@@ -36,13 +37,20 @@ export default defineComponent({
     selectedRowKeys: { type: Array,  required: true },
   },
   emits: ['onChangePage', 'onChangeSelect'],
-  setup(props, context) {
+  setup(_props, context) {
     const onChangeSelection = (selectedRowKeys) => {
-      context.emit('onChangeSelection', selectedRowKeys)
+      context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
+      //親コンポーネントに選択された行のキーを送信
     };
-
+    //貸し出し中の本を選択できなくする記述（実装方法検討中）
+    //BookListPage側の都合で以下をコメントアウトすると正しく描画されない
+    const rentableState = ()=>{
+      context.emit('rentableState')
+    };
+    
     return {
       onChangeSelection,
+      rentableState,
     }
   }
 })
