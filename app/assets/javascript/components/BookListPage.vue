@@ -8,7 +8,7 @@
       <a-checkbox 
       v-model:checked = "firstRentableFlg"
       @change="onChange">
-        <a-typography-title :level="5">貸し出し中を表示しない</a-typography-title>
+        <a-typography-title :level="5">貸し出し中の書籍を表示しない</a-typography-title>
       </a-checkbox>
     </a-col>
     <a-col>
