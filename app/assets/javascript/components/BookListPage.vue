@@ -42,6 +42,7 @@ export default defineComponent({
   },
   setup(_props) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
+
     const COLUMNS = [
       {
         title: 'タイトル',
@@ -49,7 +50,25 @@ export default defineComponent({
         ellipsis: true,
       },
       {
+        title: 'カテゴリ',
+        dataIndex: 'category',
+        width: '200px',
+        ellipsis: true,
+      },
+      {
         title: '著者',
+        dataIndex: 'author_name',
+        width: '200px',
+        ellipsis: true,
+      },
+      {
+        title: '貸し出し状況',
+        dataIndex: 'rentable',
+        width: '200px',
+        ellipsis: true,
+      },
+      {
+        title: '借主名',
         dataIndex: 'author_name',
         width: '200px',
         ellipsis: true,
@@ -71,7 +90,7 @@ export default defineComponent({
         .get('/api/v1/books/',{
           params: {
             search_text: searchText,
-            rentable: true,
+            rentable: false,
             limit: ROWS_PER_PAGE,
             offset: offset,
           },

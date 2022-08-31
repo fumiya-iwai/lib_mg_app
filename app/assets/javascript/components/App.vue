@@ -50,7 +50,7 @@ import 'user.svg';
 export default defineComponent({
   setup () {
     const itemList = [
-      { name: 'books', content: '図書一覧' },
+      { name: 'books', content: '図書の一覧' },
       { name: 'rentals', content: '貸出' },
       { name: 'book', content: '図書登録' },
       { name: 'author', content: '著者登録' },

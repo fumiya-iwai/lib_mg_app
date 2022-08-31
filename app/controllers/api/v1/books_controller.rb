@@ -8,7 +8,7 @@ class Api::V1::BooksController < Api::V1::BaseController
   def index
     books = Book.all.order(id: :desc)
 
-    if params[:rentable]
+    if to_boolean(params[:rentable])
       books = books.rentable
     end
 
@@ -48,6 +48,10 @@ class Api::V1::BooksController < Api::V1::BaseController
       count: books.limit(nil).offset(nil).count,
       data:  data,
     }
+  end
+  
+  def to_boolean(bool)
+    bool.downcase == "true"
   end
 
 end
