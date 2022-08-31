@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2022_08_30_030716) do
     t.bigint "author_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "category_id", default: 0
+    t.integer "category_id", default: 6
     t.index ["author_id"], name: "index_books_on_author_id"
   end
 

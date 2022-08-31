@@ -69,13 +69,14 @@ export default defineComponent({
                     {value: 3,label: "物理"},
                     {value: 4,label: "化学"},
                     {value: 5,label: "生物"},
-                    {value: 0,label: "その他"})
+                    {value: 6,label: "その他"})
 
     const authors = reactive([]);
 
     let validStatus = {
       title: false,
-      author_id: false
+      author_id: false,
+      category_id: false
     };
 
     // 著者を取得する
@@ -105,6 +106,13 @@ export default defineComponent({
       return Promise.resolve();
     };
 
+    let validateCategoryId = async (_rules, value) => {
+      if (!value) {
+        return Promise.reject('カテゴリを選択してください。');
+      }
+      return Promise.resolve();
+    };
+
     const rules = {
       title: [{
         required: true,
@@ -114,6 +122,11 @@ export default defineComponent({
       author_id: [{
         required: true,
         validator: validateAuthorId,
+        trigger: 'change',
+      }],
+      category_id: [{
+        required: true,
+        validator: validateCategoryId,
         trigger: 'change',
       }],
     };

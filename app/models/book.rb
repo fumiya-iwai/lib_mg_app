@@ -14,12 +14,12 @@ class Book < ApplicationRecord
   }
 
   enum category_id: {
-    Others: 0,
     English: 1,
     Math: 2,
     Physics: 3,
     Science: 4,
-    Biology: 5
+    Biology: 5,
+    Others: 6,
   }
 
 end
