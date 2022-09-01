@@ -53,6 +53,9 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios';
+import { message } from 'ant-design-vue';
+// 著者を取得する
 import 'logo.svg';
 import 'user.svg';
 
@@ -75,4 +78,14 @@ export default defineComponent({
     };
   },
 })
+axios
+      .get('/api/v1/users/')
+      .then(function (response) {
+        console.log(response.data);
+        response.data.users.forEach(function(users) {
+          users.push({
+            value: user.id
+          })
+        });
+      });
 </script>
