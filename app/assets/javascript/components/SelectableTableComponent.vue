@@ -1,11 +1,14 @@
 <template>
   <!-- a-table に自動で付与されるページネーション機能だと、全件を取得した前提でのページネーションとなる -->
   <!-- ページネーション毎にAPIにアクセスする仕様に向いていないため、:pagination="false" とし、別に a-pagination を定義する -->
+
+  <!--:row-selection="rowSelectionにすればチェックボックスの状態の変更可能"-->
+  <!--ただしページを跨いだ際のチェックを外す処理なド一部が無効化-->
   <a-table
     :dataSource="$props.data"
     :columns="$props.columns"
     :rowKey="$props.rowKey"
-    :row-selection="{selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
+    :row-selection="{ rowSelection: rowSelection, selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
     :pagination="false"
     :scroll="{ x: 800 }"/>
 
@@ -24,6 +27,7 @@
 </template>
 
 <script>
+//tmemplate部分のrow-selectionでチェックボックス追加
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -42,16 +46,18 @@ export default defineComponent({
       context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
       //親コンポーネントに選択された行のキーを送信
     };
-    //貸し出し中の本を選択できなくする記述（実装方法検討中）
-    //BookListPage側の都合で以下をコメントアウトすると正しく描画されない
-    /*const rentableState = ()=>{
-      context.emit('rentableState')
+    const rowSelection = {
+      onChange: () => {
+        console.log('aaaa');
+      },
+      getCheckboxProps: (record) => ({
+        disabled: true,
+        // Column configuration not to be checked
+      }),
     };
-    */
-    
     return {
       onChangeSelection,
-      //rentableState,
+      rowSelection,
     }
   }
 })
