@@ -51,7 +51,7 @@ class Api::V1::BooksController < Api::V1::BaseController
   end
 
   def booklist
-    lists = Book.eager_load(:author).left_outer_joins(rentals: :user)
+    lists = Book.eager_load(:author).left_outer_joins(rentals: :user).pluck(:title,:name,:last_name,:first_name) # 表示確認のためのpluckの使用
     # 本の著者の名前を内部連結
     # 本一覧と借りている人の名前を外部連結し(返した人も現状表示されている)
   end
