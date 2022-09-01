@@ -18,7 +18,8 @@
           </a-row>
         </a-col>
         <a-col>
-        pop
+        popp 
+        :users.push
         </a-col>
         <a-col justify="end" style="margin-left: 24px">
           <a-dropdown trigger="['click']">
@@ -78,14 +79,14 @@ export default defineComponent({
     };
   },
 })
-axios
-      .get('/api/v1/users/')
-      .then(function (response) {
-        console.log(response.data);
-        response.data.users.forEach(function(users) {
-          users.push({
-            value: user.id
-          })
-        });
-      });
+      axios
+            .get('/api/v1/users/')
+            .then(function (response) {
+              console.log(response.data);
+              response.data.users.forEach(function(users) {
+                users.push({
+                  value: user.id
+                })
+              });
+            });
 </script>
