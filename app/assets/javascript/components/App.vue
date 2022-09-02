@@ -18,8 +18,7 @@
           </a-row>
         </a-col>
         <a-col>
-        popp 
-        :users.push
+          <span>{{ state.point }} PT</span>
         </a-col>
         <a-col justify="end" style="margin-left: 24px">
           <a-dropdown trigger="['click']">
@@ -52,7 +51,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
@@ -73,20 +72,24 @@ export default defineComponent({
       current.value[0] = to.name;
     });
 
+    const state = reactive({
+      point: 0
+    });
+    const userPoint = () => {
+      axios
+        .get('/api/v1/users/point')
+        .then(function (response) {
+          console.log(response.data);
+          state.point = response.data.point;
+        });
+    }
+    userPoint();
+
     return {
       current,
       itemList,
+      state
     };
   },
 })
-      axios
-            .get('/api/v1/users/')
-            .then(function (response) {
-              console.log(response.data);
-              response.data.users.forEach(function(users) {
-                users.push({
-                  value: user.id
-                })
-              });
-            });
 </script>
