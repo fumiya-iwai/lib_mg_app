@@ -19,6 +19,7 @@
     :total="state.totalRentals"
     :selectedRowKeys="state.selectedRentalIds"
     :currentPage="state.currentPage"
+    :isBookList = false
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)">
     <template v-slot:actionArea>

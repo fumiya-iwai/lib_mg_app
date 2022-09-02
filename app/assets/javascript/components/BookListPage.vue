@@ -27,6 +27,7 @@
     :total="state.totalBooks"
     :selectedRowKeys="state.selectedBookIds"
     :currentPage="state.currentPage"
+    :isBookList = true
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)"><!--子コンポーネントのイベント受け取り(?)-->    
     <template v-slot:actionArea>

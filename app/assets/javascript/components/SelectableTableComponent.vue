@@ -28,7 +28,7 @@
 
 <script>
 //tmemplate部分のrow-selectionでチェックボックス追加
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   //親コンポーネントからのデータ受け取り
@@ -39,21 +39,17 @@ export default defineComponent({
     total:           { type: Number, required: true },
     rowKey:          { type: String, required: false, default: "id" },
     selectedRowKeys: { type: Array,  required: true },
+    isBookList:      { type: Boolean, required: true},//図書一覧からのアクセスかどうか
   },
   emits: ['onChangePage', 'onChangeSelect'],
-  setup(_props, context) {
+  setup(props, context) {
     const onChangeSelection = (selectedRowKeys) => {
       context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
       //親コンポーネントに選択された行のキーを送信
     };
-    const rowSelection = {
-      onChange: () => {
-        console.log('aaaa');
-      },
-    };
     const getCheckboxProps = (record) => ({
         //チェックボックスのステータス変更
-        disabled: record.author_name==='山田 祥寛',
+        disabled: props.isBookList,
       });
     return {
       onChangeSelection,
