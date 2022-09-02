@@ -71,7 +71,7 @@ export default defineComponent({
     router.afterEach((to) => {
       current.value[0] = to.name;
     });
-
+//変数定義
     const state = reactive({
       point: 0
     });
@@ -84,7 +84,7 @@ export default defineComponent({
         });
     }
     userPoint();
-
+//フロントへ反映
     return {
       current,
       itemList,

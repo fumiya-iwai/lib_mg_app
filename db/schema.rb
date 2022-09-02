@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2022_08_30_030924) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "point"
+    t.integer "point", default: 0
   end
 
   add_foreign_key "books", "authors"
