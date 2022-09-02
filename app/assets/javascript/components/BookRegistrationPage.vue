@@ -65,15 +65,12 @@ export default defineComponent({
 
     // カテゴリを取得する
     axios
-      .get('/api/v1/books',{
-          params: { categories: true },
-        })
+      .get('/api/v1/books/categories')
       .then(function (response) {
-        console.log(response.data);
-        response.data.categories.forEach(function(category) {
+        response.data.forEach(function(category) {
           categories.push({
-            value: category[0], 
-            label: category[1]  //英語表示ならこの行は抜く
+            value: category['value'],
+            label: category['label']
           })
         });
       });
