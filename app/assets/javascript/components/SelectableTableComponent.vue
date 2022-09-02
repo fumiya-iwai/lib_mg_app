@@ -8,7 +8,7 @@
     :dataSource="$props.data"
     :columns="$props.columns"
     :rowKey="$props.rowKey"
-    :row-selection="{ rowSelection: rowSelection, selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
+    :row-selection="{ getCheckboxProps:getCheckboxProps, selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
     :pagination="false"
     :scroll="{ x: 800 }"/>
 
@@ -50,14 +50,14 @@ export default defineComponent({
       onChange: () => {
         console.log('aaaa');
       },
-      getCheckboxProps: (record) => ({
-        disabled: true,
-        // Column configuration not to be checked
-      }),
     };
+    const getCheckboxProps = (record) => ({
+        //チェックボックスのステータス変更
+        disabled: record.author_name==='山田 祥寛',
+      });
     return {
       onChangeSelection,
-      rowSelection,
+      getCheckboxProps,
     }
   }
 })
