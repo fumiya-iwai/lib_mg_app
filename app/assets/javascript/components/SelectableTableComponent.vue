@@ -49,7 +49,7 @@ export default defineComponent({
     };
     const getCheckboxProps = (record) => ({
         //チェックボックスのステータス変更
-        disabled: props.isBookList,
+        disabled: props.isBookList,//BookListPageからのアクセスならチェックボックス無効化
       });
     return {
       onChangeSelection,
