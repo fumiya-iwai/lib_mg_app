@@ -64,12 +64,19 @@ export default defineComponent({
     const categories = reactive([]);
 
     // カテゴリを取得する
-    categories.push({value: 1,label: "英語"},
-                    {value: 2,label: "数学"},
-                    {value: 3,label: "物理"},
-                    {value: 4,label: "化学"},
-                    {value: 5,label: "生物"},
-                    {value: 6,label: "その他"})
+    axios
+      .get('/api/v1/books',{
+          params: { categories: true },
+        })
+      .then(function (response) {
+        console.log(response.data);
+        response.data.categories.forEach(function(category) {
+          categories.push({
+            value: category[0], 
+            label: category[1]  //英語表示ならこの行は抜く
+          })
+        });
+      });
 
     const authors = reactive([]);
 

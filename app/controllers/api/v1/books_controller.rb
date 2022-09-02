@@ -22,8 +22,12 @@ class Api::V1::BooksController < Api::V1::BaseController
 
     limit = params[:limit] || 10
     books = books.limit(limit)
+    
+    if params[:categories]
+      categories = Book.category_ids_i18n.to_a  #この_i18nを抜くとエラーが無くなるが、英語表示になってしまう。
+    end
 
-    render json: to_api_response(books)
+    render json: to_api_response(books,categories)
   end
 
   private
@@ -36,7 +40,7 @@ class Api::V1::BooksController < Api::V1::BaseController
     )
   end
 
-  def to_api_response(books)
+  def to_api_response(books,categories)
     data = books.eager_load(:author).map do |book|
       {
         id:          book.id,
@@ -48,6 +52,7 @@ class Api::V1::BooksController < Api::V1::BaseController
     {
       count: books.limit(nil).offset(nil).count,
       data:  data,
+      categories: categories
     }
   end
 
