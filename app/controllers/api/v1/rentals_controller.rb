@@ -39,6 +39,17 @@ class Api::V1::RentalsController < Api::V1::BaseController
   end
 
   def return_books
+    user = current_user
+    rentaling_ids =[]
+    rentaling_ids =return_books_params[:rental_ids]
+    rentaling_ids.each do |x,i|
+      date = Rental.where(user_id: current_user).where(id: x).pluck(:scheduled_return_date)
+      
+      if date[0] < Date.today then
+        user.point -= 3
+        user.save!
+      end
+    end
     rentals = Rental.renting_now
                     .where(id: return_books_params[:rental_ids], user_id: current_user.id)
     rentals.update_all(returned_date: Date.current)
@@ -47,8 +58,12 @@ class Api::V1::RentalsController < Api::V1::BaseController
     user = current_user
     user.point += return_books_params[:rental_ids].size
     
+
+    
     user.save!
-    # 返した数ポイント加算
+    #返した数ポイント加算
+    
+
   end
 
   private
