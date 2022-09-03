@@ -49,10 +49,12 @@ class Api::V1::BooksController < Api::V1::BaseController
       }
     end
 
-    data_rentals = Rental.all.eager_load(:user).order(id: :desc)
-    data_rentals.map do |date_rental|{
-      user_name:  date_rental.user.last_name + date_rental.user.first_name ,
+    data_rentals = Rental.all.eager_load(:user).where(returned_date:NIL).order(id: :desc)
+    data_rented = data_rentals.map do |date_rental|{
+      user_name:  date_rental.user.last_name + ' ' + date_rental.user.first_name ,
       rented_date: date_rental.rented_date,
+      rented_book_id: date_rental.book_id,
+      is_rentable: false,
       }
     end
     
@@ -60,6 +62,7 @@ class Api::V1::BooksController < Api::V1::BaseController
     {
       count: books.limit(nil).offset(nil).count,
       data:  data,
+      data_rented: data_rented,
     }
   end
 
@@ -115,4 +118,3 @@ class Api::V1::BooksController < Api::V1::BaseController
   #   end
 
 end
-
