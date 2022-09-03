@@ -10,7 +10,8 @@
     :rowKey="$props.rowKey"
     :row-selection="{ getCheckboxProps:getCheckboxProps, selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
     :pagination="false"
-    :scroll="{ x: 800 }"/>
+    :scroll="{ x: 800 }"
+    :custom-row="customRow"/>
 
   <a-row type="flex" justify="space-between" style="margin-top: 20px;">
     <a-col>
@@ -43,17 +44,35 @@ export default defineComponent({
   },
   emits: ['onChangePage', 'onChangeSelect'],
   setup(props, context) {
+    console.log("data:");
+    console.log(props.title);
     const onChangeSelection = (selectedRowKeys) => {
       context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
       //親コンポーネントに選択された行のキーを送信
     };
     const getCheckboxProps = (record) => ({
         //チェックボックスのステータス変更
-        disabled: props.isBookList,//BookListPageからのアクセスならチェックボックス無効化
+        //BookListPageからのアクセスかつdisableCheckBoxが真ならチェックボックス無効化
+        disabled: props.isBookList && disableCheckBox(record),
       });
+    //レコードのチェックボックス有効無効の条件を定義
+    const disableCheckBox = (record) =>{
+      return true;//trueを返すと図書一覧では無効化される
+    };
+    const customRow = (record) => {
+      //貸出一覧返却期限が過ぎている本があれば
+      //レコードの背景を赤くする処理の実装部分
+      if(!props.isBookList){
+        return {style: {
+          'background-color': '#e04848'
+        }};
+      }
+      
+    };
     return {
       onChangeSelection,
       getCheckboxProps,
+      customRow,
     }
   }
 })

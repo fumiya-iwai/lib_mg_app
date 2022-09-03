@@ -39,6 +39,11 @@
 </template>
 
 <script>
+/*
+メモ dataのテーブルは以下のようになっている前提で開発
+id | title | author_name | user_name | is_rentable | category_id|
+------------------------------------------------------------------
+*/
 import { defineComponent, reactive, ref } from 'vue'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
@@ -57,7 +62,7 @@ export default defineComponent({//JSとVue.jsの境界
       {title: 'タイトル',dataIndex: 'title',ellipsis: true,},
       {title: 'カテゴリ',dataIndex: 'category_id',width: '200px',ellipsis: true,},
       {title: '著者',dataIndex: 'author_name',width: '200px',ellipsis: true,},
-      {title: '貸し出し状況',dataIndex: 'rentable',width: '200px',ellipsis: true,},
+      {title: '貸し出し状況',dataIndex: 'is_rentable',width: '200px',ellipsis: true,},
       {title: '借主名',dataIndex: 'user_name',width: '200px',ellipsis: true,},
     ];
 
@@ -69,6 +74,7 @@ export default defineComponent({//JSとVue.jsの境界
       currentPage: 1,
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
+
     const search = (searchText, page = 1) => {
       let offset = (page - 1) * ROWS_PER_PAGE
       axios
@@ -77,7 +83,7 @@ export default defineComponent({//JSとVue.jsの境界
             search_text: searchText,
             rentable: rentableOnlyFlg,
             limit: ROWS_PER_PAGE,
-            offset: offset,
+            offset: offset,//ページの最初に来るデータの設定
           },
         })
         .then(function (response) {
@@ -94,7 +100,6 @@ export default defineComponent({//JSとVue.jsの境界
           state.selectedBookIds = [];
         })
     }
-
     const rentBooks = () => {
       axios
         .post('/api/v1/rentals/',{
