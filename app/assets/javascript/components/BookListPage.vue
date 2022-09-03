@@ -28,6 +28,7 @@
     :selectedRowKeys="state.selectedBookIds"
     :currentPage="state.currentPage"
     :isBookList = true
+    :isrentable ="state.isRentable"
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)"><!--子コンポーネントのイベント受け取り(?)-->    
     <template v-slot:actionArea>
@@ -72,6 +73,7 @@ export default defineComponent({//JSとVue.jsの境界
       searchText: '',
       selectedBookIds: [],
       currentPage: 1,
+      isRentable: '',
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
@@ -89,6 +91,7 @@ export default defineComponent({//JSとVue.jsの境界
         .then(function (response) {
           state.books = response.data.data;
           state.totalBooks = response.data.count;
+          state.is_rentable = response.isRentable; //追加
           state.currentPage = page;
           tmpPage = page;
           tmpSearchText = searchText;
@@ -130,7 +133,6 @@ export default defineComponent({//JSとVue.jsの境界
         search(tmpSearchText,tmpPage);
       }
     };
-
     // 初期リスト作成
     search('', 1);
 

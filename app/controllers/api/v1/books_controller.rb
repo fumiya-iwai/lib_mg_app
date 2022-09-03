@@ -1,5 +1,4 @@
 class Api::V1::BooksController < Api::V1::BaseController
-
   def create
     Book.new(books_param).save!
     render json: '', status: :created
@@ -41,6 +40,7 @@ class Api::V1::BooksController < Api::V1::BaseController
         id:          book.id,
         title:       book.title,
         author_name: book.author.name,
+        is_rentable: "true",#動作確認用
       }
     end
 

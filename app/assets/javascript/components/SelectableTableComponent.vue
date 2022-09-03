@@ -41,11 +41,10 @@ export default defineComponent({
     rowKey:          { type: String, required: false, default: "id" },
     selectedRowKeys: { type: Array,  required: true },
     isBookList:      { type: Boolean, required: true},//図書一覧からのアクセスかどうか
+    isRentable:      { type: String, required: true},
   },
   emits: ['onChangePage', 'onChangeSelect'],
   setup(props, context) {
-    console.log("data:");
-    console.log(props.title);
     const onChangeSelection = (selectedRowKeys) => {
       context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
       //親コンポーネントに選択された行のキーを送信
@@ -57,8 +56,11 @@ export default defineComponent({
       });
     //レコードのチェックボックス有効無効の条件を定義
     const disableCheckBox = (record) =>{
-      return true;//trueを返すと図書一覧では無効化される
+      //return true;//trueを返すと図書一覧では無効化される
+      if(props.isRentable === "true"){return false}
+      else {return true}
     };
+
     const customRow = (record) => {
       //貸出一覧返却期限が過ぎている本があれば
       //レコードの背景を赤くする処理の実装部分
