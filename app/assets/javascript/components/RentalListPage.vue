@@ -80,7 +80,7 @@ export default defineComponent({
         .get('/api/v1/rentals/',{
           params: {
             search_text: searchText,
-            rentable: true,
+            rentable: false,
             limit: ROWS_PER_PAGE,
             offset: offset,
           },
