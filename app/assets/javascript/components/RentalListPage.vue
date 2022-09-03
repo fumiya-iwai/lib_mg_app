@@ -97,6 +97,8 @@ export default defineComponent({
           // 検索後はチェックボックスの選択状態を初期化する（ページを跨いで選択させない）
           state.selectedRentalIds = [];
         })
+        console.log("title");
+        console.log(state.rentals);
     }
 
     const returnBooks = () => {

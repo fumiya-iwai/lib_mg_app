@@ -62,7 +62,7 @@ export default defineComponent({
     const customRow = (record) => {
       //貸出一覧返却期限が過ぎている本があれば
       //レコードの背景を赤くする処理の実装部分
-      if(!props.isBookList){
+      if(!props.isBookList && record.title === 'test_data1'){
         return {style: {
           'background-color': '#e04848'
         }};
