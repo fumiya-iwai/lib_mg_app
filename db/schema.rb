@@ -54,3 +54,4 @@ ActiveRecord::Schema.define(version: 2022_07_27_053727) do
   add_foreign_key "rentals", "books"
   add_foreign_key "rentals", "users"
 end
+# ジャンルはカテゴリ

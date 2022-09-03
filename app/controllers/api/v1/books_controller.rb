@@ -44,7 +44,6 @@ class Api::V1::BooksController < Api::V1::BaseController
   end
 
   def to_api_response(books)
-    
     data = books.eager_load(:author).map do |book|
       {
         id:          book.id,

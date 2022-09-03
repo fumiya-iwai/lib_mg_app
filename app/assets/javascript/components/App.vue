@@ -23,6 +23,11 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item>
+                  <a href="/#/rentals">
+                    貸出中
+                  </a>
+                </a-menu-item>
+                <a-menu-item>
                   <a href="/logout">
                     ログアウト
                   </a>
@@ -51,7 +56,7 @@ export default defineComponent({
   setup () {
     const itemList = [
       { name: 'books', content: '図書一覧' },
-      { name: 'rentals', content: '貸出' },
+      // { name: 'rentals', content: '貸出' },  #一時コメントアウト
       { name: 'book', content: '図書登録' },
       { name: 'author', content: '著者登録' },
     ]
