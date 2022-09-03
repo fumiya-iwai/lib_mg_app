@@ -9,13 +9,14 @@ class Api::V1::RentalsController < Api::V1::BaseController
                        user_id:               current_user.id,
                        rented_date:           today,
                        scheduled_return_date: today + 7.days)
+        user = current_user
+        user.point += 1
+        user.save!
       end
     end
 
     render json: '', status: :created
-    user = current_user
-    user.point += 1
-    user.save!
+    
   end
 
   def index
@@ -44,8 +45,10 @@ class Api::V1::RentalsController < Api::V1::BaseController
 
     render json: '', status: :no_content
     user = current_user
-    user.point += 1
+    user.point += return_books_params[:rental_ids].size
+    
     user.save!
+    # 返した数ポイント加算
   end
 
   private
@@ -79,6 +82,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
         scheduled_return_date: rental.scheduled_return_date,
         returned_date:         rental.returned_date,
       }
+      
     end
 
     {
