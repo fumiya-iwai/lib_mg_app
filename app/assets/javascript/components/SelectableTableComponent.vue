@@ -42,6 +42,7 @@ export default defineComponent({
     selectedRowKeys: { type: Array,  required: true },
     isBookList:      { type: Boolean, required: true},//図書一覧からのアクセスかどうか
     isRentable:      { type: String, required: true},
+    rentBooks:       { type: Array,   required:true},
   },
   emits: ['onChangePage', 'onChangeSelect'],
   setup(props, context) {

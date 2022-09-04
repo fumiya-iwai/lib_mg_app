@@ -49,6 +49,7 @@ export default defineComponent({
       {title: '返却予定日', dataIndex: 'scheduled_return_date', width: '120px',},
     ];
 
+    let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
     const state = reactive({
       rentals: [],
       totalRentals: 0,
@@ -56,18 +57,12 @@ export default defineComponent({
       selectedRentalIds: [],
       currentPage: 1,
     });
-    let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
     const search = (searchText, page = 1) => {
       let offset = (page - 1) * ROWS_PER_PAGE
       axios
         .get('/api/v1/rentals/',{
-          params: {
-            search_text: searchText,
-            rentable: false,
-            limit: ROWS_PER_PAGE,
-            offset: offset,
-          },
+          params: {search_text: searchText,　rentable: false,　limit: ROWS_PER_PAGE,　offset: offset,},
         })
         .then(function (response) {
           state.rentals = response.data.data;
@@ -79,6 +74,7 @@ export default defineComponent({
           lastSearchText = searchText;
           // 検索後はチェックボックスの選択状態を初期化する（ページを跨いで選択させない）
           state.selectedRentalIds = [];
+
         })
     }
 

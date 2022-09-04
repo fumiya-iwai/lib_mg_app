@@ -29,6 +29,7 @@
     :currentPage="state.currentPage"
     :isBookList = true
     :isrentable ="state.isRentable"
+    :rentBooks = "state.rentBooks"
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)"><!--子コンポーネントのイベント受け取り(?)-->    
     <template v-slot:actionArea>
@@ -73,7 +74,9 @@ export default defineComponent({//JSとVue.jsの境界
       searchText: '',
       selectedBookIds: [],
       currentPage: 1,
-      isRentable: '',
+      userName:'',
+      isRentable: true,
+      rentBooks: [],
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
@@ -81,7 +84,7 @@ export default defineComponent({//JSとVue.jsの境界
       let offset = (page - 1) * ROWS_PER_PAGE
       axios
         .get('/api/v1/books/',{
-          params: {
+          params: {//APIに渡す値の設定
             search_text: searchText,
             rentable: rentableOnlyFlg,
             limit: ROWS_PER_PAGE,
@@ -89,9 +92,13 @@ export default defineComponent({//JSとVue.jsの境界
           },
         })
         .then(function (response) {
+          console.log("hogee");
+          console.log(response);
+          state.userName = response.data.data_rented.userName;
+          state.isRentable = response.data.data_rented.is_rentable;
+          state.rentBooks = response.data.data_rented;
           state.books = response.data.data;
           state.totalBooks = response.data.count;
-          state.is_rentable = response.isRentable; //追加
           state.currentPage = page;
           tmpPage = page;
           tmpSearchText = searchText;
