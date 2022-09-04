@@ -30,7 +30,7 @@
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
-        <a-button type="primary" html-type="submit" :disabled="!formState.validate">登録する</a-button>
+        <a-button type="primary" html-type="submit" @click="emitEvent" :disabled="!formState.validate">登録する</a-button>
       </a-form-item>
 
     </a-form>
@@ -43,6 +43,7 @@ import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: "registerBook",
+  
   setup() {
     const formRef = ref();
     const formState = reactive({
@@ -96,6 +97,7 @@ export default defineComponent({
         trigger: 'change',
       }],
     };
+    this.$emit("eventTest1");
 
     const layout = {
       labelCol: {
@@ -153,4 +155,11 @@ export default defineComponent({
     }
   }
 })
+  methods: {
+    emitEvent() {
+      this.$emit('eventTest1')
+    }
+  }
+
+
 </script>

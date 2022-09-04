@@ -23,7 +23,7 @@
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)">
     <template v-slot:actionArea>
-      <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">
+      <a-button type="primary" @click="rentBooks() $emit('bookRentals','kdkd')" :disabled="state.selectedBookIds.length === 0">
         借りる
       </a-button>
     </template>
@@ -37,9 +37,7 @@ import { message } from 'ant-design-vue';
 import selectableTable from "./SelectableTableComponent";
 
 export default defineComponent({
-  components: {
-    selectableTable
-  },
+  emits:["bookRental"],
   setup(_props) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
     const COLUMNS = [
@@ -55,6 +53,13 @@ export default defineComponent({
         ellipsis: true,
       },
     ];
+    
+    // name: 'EmitChild',
+    // components: {
+    // selectableTable
+    // },
+    // this.$emit('eventTest1'),
+
 
     const state = reactive({
       books: [],
@@ -88,7 +93,9 @@ export default defineComponent({
           state.selectedBookIds = [];
         })
     }
+    const emitchage = () => {
 
+    }
     const rentBooks = () => {
       axios
         .post('/api/v1/rentals/',{
@@ -98,6 +105,7 @@ export default defineComponent({
           message.success(`${state.selectedBookIds.length}冊の本を借りました。`, 3);
           search(lastSearchText, 1);
         });
+        // this.$emits('eventTest1');
     }
 
     const changePage = (page) => {
