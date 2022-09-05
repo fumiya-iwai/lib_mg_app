@@ -29,6 +29,15 @@
         </a-select>
       </a-form-item>
 
+      <a-form-item
+        has-feedback
+        label="カテゴリー"
+        name="category_id"
+      >
+        <a-select v-model:value="formState.category_id" :options="categories">
+        </a-select>
+      </a-form-item>
+
       <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
         <a-button type="primary" html-type="submit" :disabled="!formState.validate">登録する</a-button>
       </a-form-item>
@@ -48,13 +57,30 @@ export default defineComponent({
     const formState = reactive({
       title: '',
       author_id: '',
+      category_id: '',
       validate: false
     });
+
+    const categories = reactive([]);
+
+    // カテゴリを取得する
+    axios
+      .get('/api/v1/books/categories')
+      .then(function (response) {
+        response.data.forEach(function(category) {
+          categories.push({
+            value: category['value'],
+            label: category['label']
+          })
+        });
+      });
+
     const authors = reactive([]);
 
     let validStatus = {
       title: false,
-      author_id: false
+      author_id: false,
+      category_id: false
     };
 
     // 著者を取得する
@@ -84,6 +110,13 @@ export default defineComponent({
       return Promise.resolve();
     };
 
+    let validateCategoryId = async (_rules, value) => {
+      if (!value) {
+        return Promise.reject('カテゴリを選択してください。');
+      }
+      return Promise.resolve();
+    };
+
     const rules = {
       title: [{
         required: true,
@@ -93,6 +126,11 @@ export default defineComponent({
       author_id: [{
         required: true,
         validator: validateAuthorId,
+        trigger: 'change',
+      }],
+      category_id: [{
+        required: true,
+        validator: validateCategoryId,
         trigger: 'change',
       }],
     };
@@ -132,7 +170,8 @@ export default defineComponent({
       axios
         .post('/api/v1/books',{
           title: formState.title,
-          author_id: formState.author_id
+          author_id: formState.author_id,
+          category_id: formState.category_id
         })
         .then(function (response) {
           console.log(response.data);
@@ -149,6 +188,7 @@ export default defineComponent({
       layout,
       handleValidate,
       authors,
+      categories,
       onSubmit,
     }
   }

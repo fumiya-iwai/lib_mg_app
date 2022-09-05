@@ -17,6 +17,9 @@
             </a-col>
           </a-row>
         </a-col>
+        <a-col>
+          <span>{{ state.point }} PT</span>
+        </a-col>
         <a-col justify="end" style="margin-left: 24px">
           <a-dropdown trigger="['click']">
             <img src="~user.svg" width="40" style="cursor: pointer">
@@ -24,7 +27,7 @@
               <a-menu>
                 <a-menu-item>
                   <a href="/#/rentals">
-                    貸出中
+                    貸出し中
                   </a>
                 </a-menu-item>
                 <a-menu-item>
@@ -44,11 +47,15 @@
       <router-view/>
     </a-layout-content>
   </a-layout>
+  
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios';
+import { message } from 'ant-design-vue';
+// 著者を取得する
 import 'logo.svg';
 import 'user.svg';
 
@@ -56,9 +63,8 @@ export default defineComponent({
   setup () {
     const itemList = [
       { name: 'books', content: '図書一覧' },
-      // { name: 'rentals', content: '貸出' },  #一時コメントアウト
       { name: 'book', content: '図書登録' },
-      { name: 'author', content: '著者登録' },
+      { name: 'author', content: '著者登録' }
     ]
     const current = ref([])
     const router = useRouter();
@@ -66,9 +72,24 @@ export default defineComponent({
       current.value[0] = to.name;
     });
 
+//変数定義
+    const state = reactive({
+      point: 0
+    });
+    const userPoint = () => {
+      axios
+        .get('/api/v1/users/point')
+        .then(function (response) {
+          console.log(response.data);
+          state.point = response.data.point;
+        });
+    }
+    userPoint();
+//フロントへ反映
     return {
       current,
       itemList,
+      state
     };
   },
 })

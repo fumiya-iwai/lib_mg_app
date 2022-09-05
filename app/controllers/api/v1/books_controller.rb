@@ -1,7 +1,12 @@
 class Api::V1::BooksController < Api::V1::BaseController
 
   def create
-    Book.new(books_param).save!
+    ActiveRecord::Base.transaction do
+      Book.new(books_param).save!
+      user = current_user
+      user.point += 10
+      user.save!
+    end
     render json: '', status: :created
   end
 
@@ -22,8 +27,16 @@ class Api::V1::BooksController < Api::V1::BaseController
 
     limit = params[:limit] || 10
     books = books.limit(limit)
-
+    
     render json: to_api_response(books)
+  end
+
+  def categories
+    categories = []
+    Book.category_ids_i18n.each do |en, ja|
+      categories << { value: en, label: ja }
+    end
+    render json: categories
   end
 
   private
@@ -35,7 +48,8 @@ class Api::V1::BooksController < Api::V1::BaseController
   def books_param
     params.require(:book).permit(
       :title,
-      :author_id
+      :author_id,
+      :category_id
     )
   end
 
@@ -60,7 +74,7 @@ class Api::V1::BooksController < Api::V1::BaseController
 
     {
       count: books.limit(nil).offset(nil).count,
-      data:  data,
+      data:  data
     }
   end
 end
