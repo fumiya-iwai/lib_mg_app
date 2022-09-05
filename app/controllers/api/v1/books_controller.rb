@@ -65,6 +65,7 @@ class Api::V1::BooksController < Api::V1::BaseController
       {
         id:          book.id,
         title:       book.title,
+        category_name: book.category_id_i18n,
         author_name: book.author.name,
         is_rentable: is_rentable,
         rental_state: is_rentable ? '貸出可能' : '貸出不可',
