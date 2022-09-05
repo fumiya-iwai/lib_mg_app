@@ -79,6 +79,12 @@ class Api::V1::RentalsController < Api::V1::BaseController
 
   def to_api_response(rentals)
     data = rentals.eager_load({ book: :author }, :user).map do |rental|
+
+      if rental.scheduled_return_date < Date.today
+        date_over = false
+      else
+        date_over = true
+      end
       {
         id:                    rental.id,
         title:                 rental.book.title,
@@ -87,6 +93,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
         rented_date:           rental.rented_date,
         scheduled_return_date: rental.scheduled_return_date,
         returned_date:         rental.returned_date,
+        check_date:            date_over,
       }
       
     end
