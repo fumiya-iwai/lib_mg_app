@@ -10,9 +10,14 @@ class Api::V1::RentalsController < Api::V1::BaseController
                        rented_date:           today,
                        scheduled_return_date: today + 7.days)
       end
+      rental_count = rentals_params[:book_ids].size
+      user = current_user
+      user.point += rental_count
+      user.save!
     end
 
     render json: '', status: :created
+    
   end
 
   def index
@@ -37,8 +42,18 @@ class Api::V1::RentalsController < Api::V1::BaseController
   def return_books
     rentals = Rental.renting_now
                     .where(id: return_books_params[:rental_ids], user_id: current_user.id)
-    rentals.update_all(returned_date: Date.current)
-
+    ActiveRecord::Base.transaction do
+      rentals.update_all(returned_date: Date.current)
+      return_books_count = return_books_params[:rental_ids].size
+      over_deadline_books_count = Rental.where(user_id: current_user)
+                                        .where(id: return_books_params[:rental_ids])
+                                        .where('scheduled_return_date < ?', Date.today)
+                                        .count
+      user = current_user
+      user.point += (return_books_count - 3*over_deadline_books_count)
+      user.point = 0 if user.point < 0
+      user.save!
+    end
     render json: '', status: :no_content
   end
 
@@ -73,6 +88,7 @@ class Api::V1::RentalsController < Api::V1::BaseController
         scheduled_return_date: rental.scheduled_return_date,
         returned_date:         rental.returned_date,
       }
+      
     end
 
     {
