@@ -30,7 +30,7 @@ class Api::V1::BooksController < Api::V1::BaseController
 
   def to_boolean(bool)
     bool.downcase == "true"
-end
+  end
 
   def books_param
     params.require(:book).permit(
@@ -40,13 +40,21 @@ end
   end
 
   def to_api_response(books)
-    data = books.eager_load(:author).map do |book|
+    data = books.eager_load(:author).includes(rentals: :user).references(rentals: :user).where(rentals: {returned_date: nil}).map do |book|
+      is_rentable = (book.rentals.size > 0 ? false : true)
+      user_name = ''
+      if is_rentable == false
+        rental = book.rentals[0]
+        user_name = rental.user.last_name + ' ' + rental.user.first_name
+      end
+
       {
         id:          book.id,
         title:       book.title,
         author_name: book.author.name,
-        is_rentable: false,
-        rental_user_name: 'hoge'
+        is_rentable: is_rentable,
+        rental_state: is_rentable ? '貸出可能' : '貸出不可',
+        rental_user_name: user_name
       }
     end
 
@@ -54,84 +62,5 @@ end
       count: books.limit(nil).offset(nil).count,
       data:  data,
     }
-
-    # data = books.rentable
-    # data = data.eager_load(:author).map do |book|
-    #   {
-    #     id:          book.id,
-    #     title:       book.title,
-    #     author_name: book.author.name,
-    #     is_rentable: "true",
-    #   }
-    # end
-    #
-    # data_rentals = Rental.all.eager_load(:user).where(returned_date:NIL).order(id: :desc)
-    # data_rented = data_rentals.map do |date_rental|{
-    #   id: date_rental.book_id,
-    #   title: date_rental.book.title,
-    #   author_name: date_rental.book.author.name,
-    #   user_name:  date_rental.user.last_name + ' ' + date_rental.user.first_name ,
-    #   rented_date: date_rental.rented_date,
-    #   is_rentable: "false",
-    #   }
-    # end
-    #
-    # {
-    #   count: books.limit(nil).offset(nil).count,
-    #   data:  data,
-    #   data_rented: data_rented,
-    # }
   end
-
-
-  #   def to_api_response_rented(books){
-  #     data_rentals = Rental.all.eager_load(:user).order(id: :desc)
-  #     data_rentals.map do |date_rental|{
-  #         user_name:  date_rental.user.last_name + date_rental.user.first_name ,
-  #         rented_date: date_rental.rented_date,
-  #       }
-  #     end
-  #   }
-  #   {
-  #     count: books.limit(nil).offset(nil).count,
-  #     data:  data,
-  #   }
-  # end
-
-  # def booklist
-  #   # lists = Book.eager_load(:author).left_outer_joins(rentals: :user).pluck(:title,:name,:last_name,:first_name) # 表示確認のためのpluckの使用
-  #   # 本の著者の名前を内部連結
-  #   # 本一覧と借りている人の名前を外部連結し(返した人も現状表示されている)
-  #   # lists = Book.eager_load(:author).left_outer_joins(rentals: :user).where(rentals: {returned_date: NIL}).where.not(rentals: {rented_date: NIL})
-  #   lists = Book.all.order(id: :desc)
-  #   lists = lists.left_outer_joins(:rentals).where(rentals: {returned_date: NIL}) #リストの外部連結&返却された本の情報削除
-    
-  #   if params[:search_text]
-  #     lists = lists.search_text(params[:search_text])
-  #   end
-
-  #   if params[:offset]
-  #     lists = lists.offset(params[:offset])
-  #   end
-
-  #   limit = params[:limit] || 10
-  #   lists = lists.limit(limit)
-
-  #   render json: to_api_response(lists)
-  # end
-
-  # def to_api_booklist(lists)
-  #   data = lists.map do |list|
-  #     if (lists.rented_date != NIL)
-  #       puts "TRUE"
-  #     else
-  #       puts "FALSE"
-  #     end
-  #     # {
-  #     #   id:          list.id,
-  #     #   title:       list.title,
-  #     #   author_name: list.name,
-  #     # }
-  #   end
-
 end
