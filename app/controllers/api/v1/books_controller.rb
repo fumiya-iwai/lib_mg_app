@@ -21,6 +21,10 @@ class Api::V1::BooksController < Api::V1::BaseController
       books = books.search_text(params[:search_text])
     end
 
+    if params[:search_category]
+      books = books.where(category_id: params[:search_category])
+    end
+
     if params[:offset]
       books = books.offset(params[:offset])
     end

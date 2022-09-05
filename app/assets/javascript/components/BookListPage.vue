@@ -102,7 +102,7 @@ export default defineComponent({//JSとVue.jsの境界
             rentable: rentableOnlyFlg,
             limit: ROWS_PER_PAGE,
             offset: offset,//ページの最初に来るデータの設定
-            seach_category: category_label,
+            search_category: category_label, //文字の修正
           },
         })
         .then(function (response) {
