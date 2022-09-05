@@ -18,7 +18,6 @@
           </a-row>
         </a-col>
         <a-col>
-          <book-list-page @bookRental="test()"></book-list-page>
           <span>{{ state.point }} PT</span>
         </a-col>
         <a-col justify="end" style="margin-left: 24px">
@@ -28,7 +27,7 @@
               <a-menu>
               <a-menu-item>
                 <a href="/#/rentals">
-                    {{message}}
+                    貸出し中
                   </a>
                 </a-menu-item>
               <a-menu-item>
@@ -53,7 +52,6 @@
 
 <script>
 import { defineComponent, ref, reactive } from 'vue'
-import EmitChild from './BookListPage.vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
@@ -62,14 +60,12 @@ import 'logo.svg';
 import 'user.svg';
 
 export default defineComponent({
-  data (){return{message:'kakakak'}},
   setup () {
     const itemList = [
       { name: 'books', content: '図書一覧' },
       { name: 'book', content: '図書登録' },
       { name: 'author', content: '著者登録' }
     ]
-    console.log('aaaaa')
     const current = ref([])
     const router = useRouter();
     router.afterEach((to) => {
@@ -79,12 +75,6 @@ export default defineComponent({
     const state = reactive({
       point: 0
     });
-
-    const test = (message)=>{
-      this.message=message
-      
-    };
-
     const userPoint = () => {
       axios
         .get('/api/v1/users/point')
