@@ -27,16 +27,11 @@ class Api::V1::BooksController < Api::V1::BaseController
   end
 
   def categories
-    categories_name_en_to_int = Book.category_ids
-    categories_name_en_to_ja = Book.category_ids_i18n
-    categories_name_ja_to_int = []
-    categories_name_en_to_int.each do |en, int|
-      value = int
-      label = categories_name_en_to_ja[en]
-      categories_name_ja_to_int << { value: value, label: label}
+    categories = []
+    Book.category_ids_i18n.each do |en, ja|
+      categories << { value: en, label: ja }
     end
-
-    render json: categories_name_ja_to_int
+    render json: categories
   end
 
   private

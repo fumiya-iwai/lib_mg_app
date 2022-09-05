@@ -16,8 +16,11 @@ Rails.application.routes.draw do
   #
   namespace 'api' do
     namespace 'v1' do
-      resources :books, only: [:create, :index]
-      get '/books/categories', to: 'books#categories'
+      resources :books, only: [:create, :index] do
+        collection do
+          get 'categories'
+        end
+      end
       resources :authors, only: [:create, :index]
       resources :rentals, only: [:create, :index]
       put '/rentals/return', to: 'rentals#return_books'
