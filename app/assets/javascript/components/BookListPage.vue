@@ -23,7 +23,7 @@
 
   <selectable-table
     :columns="COLUMNS"
-    :data="state.hoge"
+    :data="state.books"
     :total="state.totalBooks"
     :selectedRowKeys="state.selectedBookIds"
     :currentPage="state.currentPage"
@@ -43,7 +43,7 @@
 <script>
 /*
 メモ dataのテーブルは以下のようになっている前提で開発
-id | title | author_name | user_name | is_rentable | category_id|
+id | title | author_name | rental_user_name | is_rentable | category_id|
 ------------------------------------------------------------------
 */
 import { defineComponent, reactive, ref } from 'vue'
@@ -65,7 +65,7 @@ export default defineComponent({//JSとVue.jsの境界
       {title: 'カテゴリ',dataIndex: 'category_id',width: '200px',ellipsis: true,},
       {title: '著者',dataIndex: 'author_name',width: '200px',ellipsis: true,},
       {title: '貸し出し状況',dataIndex: 'is_rentable',width: '200px',ellipsis: true,},
-      {title: '借主名',dataIndex: 'user_name',width: '200px',ellipsis: true,},
+      {title: '借主名',dataIndex: 'rental_user_name',width: '200px',ellipsis: true,},
     ];
 
     const state = reactive({//変数初期値
@@ -74,9 +74,9 @@ export default defineComponent({//JSとVue.jsの境界
       searchText: '',
       selectedBookIds: [],
       currentPage: 1,
-      rentBooks: [],
-      hoge: [],
-      isRentable: [],
+      //rentBooks: [],
+      //hoge: [],
+      //isRentable: [],
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
@@ -94,14 +94,14 @@ export default defineComponent({//JSとVue.jsの境界
         .then(function (response) {
           console.log("hogee");
           console.log(response);
-          state.rentBooks = response.data.data_rented;
+          //state.rentBooks = response.data.data_rented;
           state.books = response.data.data;
           state.rentBooks = response.data.data_rented;
           state.totalBooks = response.data.count;
           state.currentPage = page;
-          state.hoge = state.books.concat(state.rentBooks)
-          state.isRentable = state.hoge.is_rentable;
-          console.log(response.data.data.is_rentable );
+          //state.hoge = state.books.concat(state.rentBooks)
+          //state.isRentable = state.hoge.is_rentable;
+          //console.log(state.hoge[0].is_rentable);
           tmpPage = page;
           tmpSearchText = searchText;
           // テキストボックスが変更された状態でページネーションされた場合を考慮し、

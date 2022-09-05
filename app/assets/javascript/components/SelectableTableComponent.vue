@@ -55,30 +55,33 @@ export default defineComponent({
     const getCheckboxProps = (record) => ({
         //チェックボックスのステータス変更
         //BookListPageからのアクセスかつdisableCheckBoxが真ならチェックボックス無効化
-        disabled: props.isBookList && disableCheckBox(record),
+        disabled: props.isBookList && !disableCheckBox(record),
       });
     //レコードのチェックボックス有効無効の条件を定義
     const disableCheckBox = (record) =>{
       //return true;//trueを返すと図書一覧では無効化される
-      //console.log("dsds");
-      //console.log(props.isRentable);
-      if(props.data.is_rentable === "false"){
-        console.log("false");
-        return true}
-      else {
-        console.log("true");
-        return false}
+      //console.log("record:",record);
+      if(record.is_rentable == true){return true}
+      else {return false}
     };
 
     const customRow = (record) => {
       //貸出一覧返却期限が過ぎている本があれば
       //レコードの背景を赤くする処理の実装部分
-      if(!props.isBookList && record.title === 'test_data1'){
+      let date = new Date();
+      //console.log("date:", date);
+      //if(!props.isBookList && record.title === 'test_data1'){
+        if(!props.isBookList){
+          //console.log("record.scheduled_return_date:", record.scheduled_return_date);
+          //console.log("record.scheduled_return_date:",new_date);
         return {style: {
           'background-color': '#e04848'
         }};
       }
-      
+      //BookListPageからのアクセスなら貸し出し状況をis_rentableに応じて変更
+      if(props.isBookList && record.is_rentable === false){
+        console.log("record.is_rentable == false, record:", record);
+      }
     };
     return {
       onChangeSelection,
