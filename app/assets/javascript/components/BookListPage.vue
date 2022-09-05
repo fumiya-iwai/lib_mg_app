@@ -9,7 +9,7 @@
         v-model:value="state.searchText"
         placeholder="キーワードで検索"
         enter-button
-        @search="search(state.searchText, 1)"
+        @search="search(state.searchText, 1,null)"
       />
       <a-checkbox 
       :span="4"
@@ -18,8 +18,10 @@
         <a-typography-title :level="5">貸出可能のみ表示する</a-typography-title>
       </a-checkbox>
       <a-select
-        placeholder="Select a person"
-        :options="category"
+        placeholder="カテゴリを選択"
+        :options="categories"
+        style="width: 200px"
+        @change="handleChange"
         >
       </a-select>
     </a-col>
@@ -91,7 +93,7 @@ export default defineComponent({//JSとVue.jsの境界
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
-    const search = (searchText, page = 1) => {
+    const search = (searchText, page = 1, category_label) => {
       let offset = (page - 1) * ROWS_PER_PAGE
       axios
         .get('/api/v1/books/',{
@@ -100,6 +102,7 @@ export default defineComponent({//JSとVue.jsの境界
             rentable: rentableOnlyFlg,
             limit: ROWS_PER_PAGE,
             offset: offset,//ページの最初に来るデータの設定
+            seach_category: category_label,
           },
         })
         .then(function (response) {
@@ -129,7 +132,7 @@ export default defineComponent({//JSとVue.jsの境界
     }
 
     const changePage = (page) => {
-      search(lastSearchText, page);
+      search(lastSearchText, page, null);
     };
 
     const updateSelections = (selectedRowKeys) => {
@@ -138,15 +141,19 @@ export default defineComponent({//JSとVue.jsの境界
     const onChange = (e) =>{//チェックボックスがチェックされた
       if(e.target.checked){//貸し出し中を表示しないとき
         rentableOnlyFlg = true;
-        search(tmpSearchText,1);
+        search(tmpSearchText,1, null);
       }
       else{//貸し出し中を表示するとき
         rentableOnlyFlg = false;
         search(tmpSearchText,1);
       }
     };
+    const handleChange = (value) => {
+      console.log(`selected ${value}`);
+      search(lastSearchText, 1, value);
+    };
     // 初期リスト作成
-    search('', 1);
+    search('', 1, null);
 
     return {
       COLUMNS,
@@ -157,6 +164,8 @@ export default defineComponent({//JSとVue.jsの境界
       updateSelections,
       onChange,
       firstRentableFlg: ref(rentableOnlyFlg),
+      categories,
+      handleChange,
     }
   },
   

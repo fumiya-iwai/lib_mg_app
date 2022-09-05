@@ -1,7 +1,7 @@
 <template>
   <a-row type="flex" justify="space-between">
     <a-col>
-      <a-typography-title :level="2">貸出一覧</a-typography-title>
+      <a-typography-title :level="2">借りている本</a-typography-title>
     </a-col>
     <a-col>
       <a-input-search
