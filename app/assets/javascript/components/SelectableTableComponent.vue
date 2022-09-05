@@ -10,8 +10,7 @@
     :rowKey="$props.rowKey"
     :row-selection="{ getCheckboxProps:getCheckboxProps, selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
     :pagination="false"
-    :scroll="{ x: 800 }"
-    :custom-row="customRow"/>
+    :scroll="{ x: 800 }"/>
 
   <a-row type="flex" justify="space-between" style="margin-top: 20px;">
     <a-col>
@@ -65,7 +64,7 @@ export default defineComponent({
       else {return false}
     };
 
-    const customRow = (record) => {
+    /*const customRow = (record) => {
       //貸出一覧返却期限が過ぎている本があれば
       //レコードの背景を赤くする処理の実装部分
       let date = new Date();
@@ -82,11 +81,11 @@ export default defineComponent({
       if(props.isBookList && record.is_rentable === false){
         console.log("record.is_rentable == false, record:", record);
       }
-    };
+    };*/
     return {
       onChangeSelection,
       getCheckboxProps,
-      customRow,
+      //customRow,
     }
   }
 })

@@ -8,7 +8,7 @@
       <a-checkbox 
       v-model:checked = "firstRentableFlg"
       @change="onChange">
-        <a-typography-title :level="5">貸し出し中の書籍を表示しない</a-typography-title>
+        <a-typography-title :level="5">貸出可能のみ表示する</a-typography-title>
       </a-checkbox>
     </a-col>
     <a-col>
@@ -50,7 +50,7 @@ import { defineComponent, reactive, ref } from 'vue'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import selectableTable from "./SelectableTableComponent";
-let rentableOnlyFlg = true
+let rentableOnlyFlg = false
 let tmpPage = 1
 let tmpSearchText = ''
 export default defineComponent({//JSとVue.jsの境界
@@ -64,7 +64,7 @@ export default defineComponent({//JSとVue.jsの境界
       {title: 'タイトル',dataIndex: 'title',ellipsis: true,},
       {title: 'カテゴリ',dataIndex: 'category_id',width: '200px',ellipsis: true,},
       {title: '著者',dataIndex: 'author_name',width: '200px',ellipsis: true,},
-      {title: '貸し出し状況',dataIndex: 'is_rentable',width: '200px',ellipsis: true,},
+      {title: '貸し出し状況',dataIndex: 'rental_state',width: '200px',ellipsis: true,},
       {title: '借主名',dataIndex: 'rental_user_name',width: '200px',ellipsis: true,},
     ];
 
@@ -134,12 +134,12 @@ export default defineComponent({//JSとVue.jsの境界
       if(e.target.checked){//貸し出し中を表示しないとき
         //console.log('checked, rentableOnlyFlg:%s', rentableOnlyFlg);//デバック用ログ
         rentableOnlyFlg = true;
-        search(tmpSearchText,tmpPage);
+        search(tmpSearchText,1);
       }
       else{//貸し出し中を表示するとき
         //console.log('unchecked');//デバック用ログ
         rentableOnlyFlg = false;
-        search(tmpSearchText,tmpPage);
+        search(tmpSearchText,1);
       }
     };
     // 初期リスト作成
