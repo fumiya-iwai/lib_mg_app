@@ -13,3 +13,10 @@ end
 
 User.create!(last_name: '和田', first_name: '哲也', email: 'wada@example.com', password: 'ingage', password_confirmation: 'ingage',point:0)
 User.create!(last_name: '永田', first_name: '兆', email: 'nagata@example.com', password: 'ingage', password_confirmation: 'ingage',point:0)
+
+Category.create!(name: '英語')
+Category.create!(name: '数学')
+Category.create!(name: '物理')
+Category.create!(name: '化学')
+Category.create!(name: '生物')
+Category.create!(name: 'その他')
