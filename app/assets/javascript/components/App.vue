@@ -25,13 +25,13 @@
             <img src="~user.svg" width="40" style="cursor: pointer">
             <template #overlay>
               <a-menu>
-              <a-menu-item>
-                <a href="/#/rentals">
+                <a-menu-item>
+                  <a href="/#/rentals">
                     貸出し中
                   </a>
                 </a-menu-item>
-              <a-menu-item>
-                <a href="/logout">
+                <a-menu-item>
+                  <a href="/logout">
                     ログアウト
                   </a>
                 </a-menu-item>

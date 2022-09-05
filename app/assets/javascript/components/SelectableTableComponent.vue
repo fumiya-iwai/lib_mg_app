@@ -1,11 +1,14 @@
 <template>
   <!-- a-table に自動で付与されるページネーション機能だと、全件を取得した前提でのページネーションとなる -->
   <!-- ページネーション毎にAPIにアクセスする仕様に向いていないため、:pagination="false" とし、別に a-pagination を定義する -->
+
+  <!--:row-selection="rowSelectionにすればチェックボックスの状態の変更可能"-->
+  <!--ただしページを跨いだ際のチェックを外す処理なド一部が無効化-->
   <a-table
     :dataSource="$props.data"
     :columns="$props.columns"
     :rowKey="$props.rowKey"
-    :row-selection="{ selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
+    :row-selection="{ getCheckboxProps:getCheckboxProps, selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
     :pagination="false"
     :scroll="{ x: 800 }"/>
 
@@ -24,9 +27,11 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+//tmemplate部分のrow-selectionでチェックボックス追加
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
+  //親コンポーネントからのデータ受け取り
   props: {
     columns:         { type: Array,  required: true },
     data:            { type: Array,  required: true },
@@ -34,15 +39,53 @@ export default defineComponent({
     total:           { type: Number, required: true },
     rowKey:          { type: String, required: false, default: "id" },
     selectedRowKeys: { type: Array,  required: true },
+    isBookList:      { type: Boolean, required: true},//図書一覧からのアクセスかどうか
+    isRentable:      { type: Array, required: true},
+    rentBooks:       { type: Array,   required:true},
   },
   emits: ['onChangePage', 'onChangeSelect'],
   setup(props, context) {
+    console.log("sss")
+    console.log(props);
     const onChangeSelection = (selectedRowKeys) => {
-      context.emit('onChangeSelection', selectedRowKeys)
+      context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
+      //親コンポーネントに選択された行のキーを送信
+    };
+    const getCheckboxProps = (record) => ({
+        //チェックボックスのステータス変更
+        //BookListPageからのアクセスかつdisableCheckBoxが真ならチェックボックス無効化
+        disabled: props.isBookList && !disableCheckBox(record),
+      });
+    //レコードのチェックボックス有効無効の条件を定義
+    const disableCheckBox = (record) =>{
+      //return true;//trueを返すと図書一覧では無効化される
+      //console.log("record:",record);
+      if(record.is_rentable == true){return true}
+      else {return false}
     };
 
+    /*const customRow = (record) => {
+      //貸出一覧返却期限が過ぎている本があれば
+      //レコードの背景を赤くする処理の実装部分
+      let date = new Date();
+      //console.log("date:", date);
+      //if(!props.isBookList && record.title === 'test_data1'){
+        if(!props.isBookList){
+          //console.log("record.scheduled_return_date:", record.scheduled_return_date);
+          //console.log("record.scheduled_return_date:",new_date);
+        return {style: {
+          'background-color': '#e04848'
+        }};
+      }
+      //BookListPageからのアクセスなら貸し出し状況をis_rentableに応じて変更
+      if(props.isBookList && record.is_rentable === false){
+        console.log("record.is_rentable == false, record:", record);
+      }
+    };*/
     return {
       onChangeSelection,
+      getCheckboxProps,
+      //customRow,
     }
   }
 })

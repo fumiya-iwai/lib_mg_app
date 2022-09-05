@@ -3,6 +3,7 @@ class Book < ApplicationRecord
 
   belongs_to :author
   has_many :rentals, dependent: :destroy
+  has_many :users, through: :rentals
 
   scope :rentable, -> {
     book_ids = Rental.renting_now.pluck(:book_id)
