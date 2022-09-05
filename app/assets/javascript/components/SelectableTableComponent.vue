@@ -41,11 +41,13 @@ export default defineComponent({
     rowKey:          { type: String, required: false, default: "id" },
     selectedRowKeys: { type: Array,  required: true },
     isBookList:      { type: Boolean, required: true},//図書一覧からのアクセスかどうか
-    isRentable:      { type: String, required: true},
+    isRentable:      { type: Array, required: true},
     rentBooks:       { type: Array,   required:true},
   },
   emits: ['onChangePage', 'onChangeSelect'],
   setup(props, context) {
+    console.log("sss")
+    console.log(props);
     const onChangeSelection = (selectedRowKeys) => {
       context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
       //親コンポーネントに選択された行のキーを送信
@@ -58,8 +60,14 @@ export default defineComponent({
     //レコードのチェックボックス有効無効の条件を定義
     const disableCheckBox = (record) =>{
       //return true;//trueを返すと図書一覧では無効化される
-      if(props.isRentable === "true"){return false}
-      else {return true}
+      //console.log("dsds");
+      //console.log(props.isRentable);
+      if(props.data.is_rentable === "false"){
+        console.log("false");
+        return true}
+      else {
+        console.log("true");
+        return false}
     };
 
     const customRow = (record) => {

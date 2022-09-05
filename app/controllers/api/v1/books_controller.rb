@@ -32,6 +32,10 @@ class Api::V1::BooksController < Api::V1::BaseController
 
   private
 
+  def to_boolean(bool)
+    bool.downcase == "true"
+end
+
   def books_param
     params.require(:book).permit(
       :title,
@@ -39,25 +43,25 @@ class Api::V1::BooksController < Api::V1::BaseController
     )
   end
 
-  def to_boolean(bool)
-    bool.downcase == "true"
-  end
-
   def to_api_response(books)
-    data = books.eager_load(:author).map do |book|
+    data = books.rentable
+    data = data.eager_load(:author).map do |book|
       {
         id:          book.id,
         title:       book.title,
         author_name: book.author.name,
+        is_rentable: "true",
       }
     end
 
     data_rentals = Rental.all.eager_load(:user).where(returned_date:NIL).order(id: :desc)
     data_rented = data_rentals.map do |date_rental|{
+      id: date_rental.book_id,
+      title: date_rental.book.title,
+      author_name: date_rental.book.author.name,
       user_name:  date_rental.user.last_name + ' ' + date_rental.user.first_name ,
       rented_date: date_rental.rented_date,
-      rented_book_id: date_rental.book_id,
-      is_rentable: false,
+      is_rentable: "false",
       }
     end
     

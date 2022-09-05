@@ -23,12 +23,12 @@
 
   <selectable-table
     :columns="COLUMNS"
-    :data="state.books"
+    :data="state.hoge"
     :total="state.totalBooks"
     :selectedRowKeys="state.selectedBookIds"
     :currentPage="state.currentPage"
     :isBookList = true
-    :isrentable ="state.isRentable"
+    :isRentable ="state.isRentable"
     :rentBooks = "state.rentBooks"
     @onChangePage="changePage($event)"
     @onChangeSelection="updateSelections($event)"><!--子コンポーネントのイベント受け取り(?)-->    
@@ -74,9 +74,9 @@ export default defineComponent({//JSとVue.jsの境界
       searchText: '',
       selectedBookIds: [],
       currentPage: 1,
-      userName:'',
-      isRentable: true,
       rentBooks: [],
+      hoge: [],
+      isRentable: [],
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
@@ -94,12 +94,14 @@ export default defineComponent({//JSとVue.jsの境界
         .then(function (response) {
           console.log("hogee");
           console.log(response);
-          state.userName = response.data.data_rented.userName;
-          state.isRentable = response.data.data_rented.is_rentable;
           state.rentBooks = response.data.data_rented;
           state.books = response.data.data;
+          state.rentBooks = response.data.data_rented;
           state.totalBooks = response.data.count;
           state.currentPage = page;
+          state.hoge = state.books.concat(state.rentBooks)
+          state.isRentable = state.hoge.is_rentable;
+          console.log(response.data.data.is_rentable );
           tmpPage = page;
           tmpSearchText = searchText;
           // テキストボックスが変更された状態でページネーションされた場合を考慮し、
