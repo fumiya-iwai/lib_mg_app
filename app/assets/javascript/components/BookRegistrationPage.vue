@@ -52,7 +52,7 @@ import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: "registerBook",
-  setup() {
+  setup(_props,context) {
     const formRef = ref();
     const formState = reactive({
       title: '',
@@ -178,6 +178,7 @@ export default defineComponent({
           formRef.value.resetFields();
           initValidate();
           message.success('図書の登録が完了しました。', 3);
+          context.emit('updatepoint');
         });
     };
 

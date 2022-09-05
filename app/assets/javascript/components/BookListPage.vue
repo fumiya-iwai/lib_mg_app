@@ -57,7 +57,7 @@ export default defineComponent({//JSとVue.jsの境界
   components: {
     selectableTable
   },
-  setup(_props) {
+  setup(_props,context) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
 
     const COLUMNS = [
@@ -119,6 +119,7 @@ export default defineComponent({//JSとVue.jsの境界
         })
         .then(function () {
           message.success(`${state.selectedBookIds.length}冊の本を借りました。`, 3);
+          context.emit('updatepoint');
           search(lastSearchText, 1);
         });
     }

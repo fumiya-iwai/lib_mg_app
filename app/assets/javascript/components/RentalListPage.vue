@@ -40,7 +40,7 @@ export default defineComponent({
   components: {
     selectableTable
   },
-  setup(_props) {
+  setup(_props,context) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
     const COLUMNS = [
       {title: 'タイトル',   dataIndex: 'title', ellipsis: true,},
@@ -85,6 +85,7 @@ export default defineComponent({
         })
         .then(function () {
           message.success(`${state.selectedRentalIds.length}冊の本を返却しました。`, 3);
+          context.emit('updatepoint');
           search(lastSearchText, 1);
         });
     }
