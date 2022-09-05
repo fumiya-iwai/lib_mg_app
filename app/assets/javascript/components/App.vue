@@ -11,7 +11,7 @@
               <a-menu v-model:selectedKeys="current"
                       mode="horizontal" style="border: 0">
                 <a-menu-item v-for="item in itemList" :key="item.name">
-                  <router-link :to="{ name: item.name }">{{ item.content }}</router-link>
+                  <router-link :to="{ name: item.name }" >{{ item.content }}</router-link>
                 </a-menu-item>
               </a-menu>
             </a-col>
@@ -27,7 +27,7 @@
               <a-menu>
                 <a-menu-item>
                   <a href="/#/rentals">
-                    貸出し中
+                    借りている本
                   </a>
                 </a-menu-item>
                 <a-menu-item>
@@ -44,7 +44,7 @@
     <a-divider style="height: 1px; background-color: #F0F0F0; margin: 0"/>
 
     <a-layout-content style="padding: 50px;">
-      <router-view/>
+      <router-view @updatepoint="userPoint()"/>
     </a-layout-content>
   </a-layout>
   
@@ -89,7 +89,8 @@ export default defineComponent({
     return {
       current,
       itemList,
-      state
+      state,
+      userPoint
     };
   },
 })
