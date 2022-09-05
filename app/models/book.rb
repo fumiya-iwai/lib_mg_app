@@ -12,4 +12,14 @@ class Book < ApplicationRecord
   scope :search_text, -> (text)  {
     joins(:author).where('"books"."title" like ?', "%#{text}%").or(self.where('"authors"."name" like ?', "%#{text}%"))
   }
+
+  enum category_id: {
+    English: 1,
+    Math: 2,
+    Physics: 3,
+    Science: 4,
+    Biology: 5,
+    Others: 6,
+  }
+
 end
