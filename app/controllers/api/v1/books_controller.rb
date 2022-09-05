@@ -23,11 +23,7 @@ class Api::V1::BooksController < Api::V1::BaseController
     limit = params[:limit] || 10
     books = books.limit(limit)
 
-    books = books.eager_load(rentals: :user)
-    books = books.where(rentals: {returned_date: NIL})
-
     render json: to_api_response(books)
-    # render json: to_api_response_rented(books)
   end
 
   private
@@ -44,33 +40,47 @@ end
   end
 
   def to_api_response(books)
-    data = books.rentable
-    data = data.eager_load(:author).map do |book|
+    data = books.eager_load(:author).map do |book|
       {
         id:          book.id,
         title:       book.title,
         author_name: book.author.name,
-        is_rentable: "true",
+        is_rentable: false,
+        rental_user_name: 'hoge'
       }
     end
-
-    data_rentals = Rental.all.eager_load(:user).where(returned_date:NIL).order(id: :desc)
-    data_rented = data_rentals.map do |date_rental|{
-      id: date_rental.book_id,
-      title: date_rental.book.title,
-      author_name: date_rental.book.author.name,
-      user_name:  date_rental.user.last_name + ' ' + date_rental.user.first_name ,
-      rented_date: date_rental.rented_date,
-      is_rentable: "false",
-      }
-    end
-    
 
     {
       count: books.limit(nil).offset(nil).count,
       data:  data,
-      data_rented: data_rented,
     }
+
+    # data = books.rentable
+    # data = data.eager_load(:author).map do |book|
+    #   {
+    #     id:          book.id,
+    #     title:       book.title,
+    #     author_name: book.author.name,
+    #     is_rentable: "true",
+    #   }
+    # end
+    #
+    # data_rentals = Rental.all.eager_load(:user).where(returned_date:NIL).order(id: :desc)
+    # data_rented = data_rentals.map do |date_rental|{
+    #   id: date_rental.book_id,
+    #   title: date_rental.book.title,
+    #   author_name: date_rental.book.author.name,
+    #   user_name:  date_rental.user.last_name + ' ' + date_rental.user.first_name ,
+    #   rented_date: date_rental.rented_date,
+    #   is_rentable: "false",
+    #   }
+    # end
+    #
+    # {
+    #   count: books.limit(nil).offset(nil).count,
+    #   data:  data,
+    #   data_rented: data_rented,
+    # }
   end
 
 
