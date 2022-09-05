@@ -9,10 +9,11 @@ class Api::V1::RentalsController < Api::V1::BaseController
                        user_id:               current_user.id,
                        rented_date:           today,
                        scheduled_return_date: today + 7.days)
-        user = current_user
-        user.point += 1
-        user.save!
       end
+      rental_count = rentals_params[:book_ids].size
+      user = current_user
+      user.point += rental_count
+      user.save!
     end
 
     render json: '', status: :created
@@ -39,31 +40,18 @@ class Api::V1::RentalsController < Api::V1::BaseController
   end
 
   def return_books
-    user = current_user
-    rentaling_ids =[]
-    rentaling_ids =return_books_params[:rental_ids]
-    rentaling_ids.each do |x,i|
-      date = Rental.where(user_id: current_user).where(id: x).pluck(:scheduled_return_date)
-      
-      if date[0] < Date.today then
-        user.point -= 3
-        user.save!
-      end
-    end
     rentals = Rental.renting_now
                     .where(id: return_books_params[:rental_ids], user_id: current_user.id)
-    rentals.update_all(returned_date: Date.current)
-
+    ActiveRecord::Base.transaction do
+      rentals.update_all(returned_date: Date.current)
+      return_books_count = return_books_params[:rental_ids].size
+      over_deadline_books_count=Rental.where(user_id: current_user).where('id = ?', return_books_params[:rental_ids]).where('? < ?',[:scheduled_return_date], Date.today).count
+      user = current_user
+      user.point += (return_books_count - 3*over_deadline_books_count)
+      user.point = 0 if user.point < 0
+      user.save!
+    end
     render json: '', status: :no_content
-    user = current_user
-    user.point += return_books_params[:rental_ids].size
-    
-
-    
-    user.save!
-    #返した数ポイント加算
-    
-
   end
 
   private
