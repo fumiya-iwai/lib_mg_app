@@ -37,7 +37,7 @@
     :isRentable ="state.isRentable"
     :rentBooks = "state.rentBooks"
     @onChangePage="changePage($event)"
-    @onChangeSelection="updateSelections($event)"><!--子コンポーネントのイベント受け取り(?)-->    
+    @onChangeSelection="updateSelections($event)">
     <template v-slot:actionArea>
       <a-button type="primary" @click="rentBooks()" :disabled="state.selectedBookIds.length === 0">
         借りる
@@ -54,7 +54,7 @@ import selectableTable from "./SelectableTableComponent";
 let rentableOnlyFlg = false
 let tmpPage = 1
 let tmpSearchText = ''
-export default defineComponent({//JSとVue.jsの境界
+export default defineComponent({
   components: {
     selectableTable
   },
@@ -62,11 +62,34 @@ export default defineComponent({//JSとVue.jsの境界
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
 
     const COLUMNS = [
-      {title: 'タイトル',dataIndex: 'title',ellipsis: true,},
-      {title: 'カテゴリ',dataIndex: 'category_name',width: '200px',ellipsis: true,},
-      {title: '著者',dataIndex: 'author_name',width: '200px',ellipsis: true,},
-      {title: '貸し出し状況',dataIndex: 'rental_state',width: '200px',ellipsis: true,},
-      {title: '借主名',dataIndex: 'rental_user_name',width: '200px',ellipsis: true,},
+      {
+        title: 'タイトル',
+        dataIndex: 'title',
+        ellipsis: true,
+      },
+      {
+        title: 'カテゴリ',
+        dataIndex: 'category_name',
+        width: '200px',
+        ellipsis: true,},
+      {
+        title: '著者',
+        dataIndex: 'author_name',
+        width: '200px',
+        ellipsis: true,
+      },
+      {
+        title: '貸し出し状況',
+        dataIndex: 'rental_state',
+        width: '200px',
+        ellipsis: true,
+      },
+      {
+        title: '借主名',
+        dataIndex: 'rental_user_name',
+        width: '200px',
+        ellipsis: true,
+      },
     ];
 
     // カテゴリを取得する
@@ -81,8 +104,6 @@ export default defineComponent({//JSとVue.jsの境界
           })
         });
       });
-    console.log("value:",categories);
-
 
     const state = reactive({//変数初期値
       books: [],
@@ -149,7 +170,6 @@ export default defineComponent({//JSとVue.jsの境界
       }
     };
     const handleChange = (value) => {
-      console.log(`selected ${value}`);
       search(lastSearchText, 1, value);
     };
     // 初期リスト作成

@@ -43,10 +43,27 @@ export default defineComponent({
   setup(_props,context) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
     const COLUMNS = [
-      {title: 'タイトル',   dataIndex: 'title', ellipsis: true,},
-      {title: '著者',       dataIndex: 'author_name', width: '200px', ellipsis: true,},
-      {title: '貸出日',     dataIndex: 'rented_date', width: '120px', },
-      {title: '返却予定日', dataIndex: 'scheduled_return_date', width: '120px',},
+      {
+        title: 'タイトル',
+        dataIndex: 'title', 
+        ellipsis: true,
+      },
+      {
+        title: '著者',
+        dataIndex: 'author_name',
+        width: '200px',
+        ellipsis: true,
+      },
+      {
+        title: '貸出日',
+        dataIndex: 'rented_date',
+        width: '120px',
+      },
+      {
+        title: '返却予定日',
+        dataIndex: 'scheduled_return_date',
+        width: '120px',
+      },
     ];
 
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
@@ -74,7 +91,6 @@ export default defineComponent({
           lastSearchText = searchText;
           // 検索後はチェックボックスの選択状態を初期化する（ページを跨いで選択させない）
           state.selectedRentalIds = [];
-
         })
     }
 
