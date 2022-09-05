@@ -54,7 +54,7 @@ class Api::V1::BooksController < Api::V1::BaseController
   end
 
   def to_api_response(books)
-    data = books.eager_load(:author).eager_load(:category).includes(rentals: :user).references(rentals: :user).where(rentals: {returned_date: nil}).map do |book|
+    data = books.eager_load(:author).includes(rentals: :user).references(rentals: :user).where(rentals: {returned_date: nil}).map do |book|
       is_rentable = (book.rentals.size > 0 ? false : true)
       user_name = ''
       if is_rentable == false
@@ -66,11 +66,9 @@ class Api::V1::BooksController < Api::V1::BaseController
         id:          book.id,
         title:       book.title,
         author_name: book.author.name,
-        category_name: book.category.name,
         is_rentable: is_rentable,
         rental_state: is_rentable ? '貸出可能' : '貸出不可',
-        rental_user_name: user_name,
-
+        rental_user_name: user_name
       }
     end
 
