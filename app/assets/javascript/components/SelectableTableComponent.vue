@@ -1,9 +1,6 @@
 <template>
   <!-- a-table に自動で付与されるページネーション機能だと、全件を取得した前提でのページネーションとなる -->
   <!-- ページネーション毎にAPIにアクセスする仕様に向いていないため、:pagination="false" とし、別に a-pagination を定義する -->
-
-  <!--:row-selection="rowSelectionにすればチェックボックスの状態の変更可能"-->
-  <!--ただしページを跨いだ際のチェックを外す処理なド一部が無効化-->
   <a-table
     :dataSource="$props.data"
     :columns="$props.columns"
@@ -27,7 +24,6 @@
 </template>
 
 <script>
-//tmemplate部分のrow-selectionでチェックボックス追加
 import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
@@ -40,16 +36,13 @@ export default defineComponent({
     rowKey:          { type: String, required: false, default: "id" },
     selectedRowKeys: { type: Array,  required: true },
     isBookList:      { type: Boolean, required: true},//図書一覧からのアクセスかどうか
-    isRentable:      { type: Array, required: true},
-    rentBooks:       { type: Array,   required:true},
   },
   emits: ['onChangePage', 'onChangeSelect'],
   setup(props, context) {
     console.log("sss")
     console.log(props);
     const onChangeSelection = (selectedRowKeys) => {
-      context.emit('onChangeSelection', selectedRowKeys)//カスタムイベントを発生
-      //親コンポーネントに選択された行のキーを送信
+      context.emit('onChangeSelection', selectedRowKeys)
     };
     const getCheckboxProps = (record) => ({
         //チェックボックスのステータス変更
@@ -59,7 +52,6 @@ export default defineComponent({
     //レコードのチェックボックス有効無効の条件を定義
     const disableCheckBox = (record) =>{
       //return true;//trueを返すと図書一覧では無効化される
-      //console.log("record:",record);
       if(record.is_rentable == true){return true}
       else {return false}
     };
@@ -81,7 +73,8 @@ export default defineComponent({
       if(props.isBookList && record.is_rentable === false){
         console.log("record.is_rentable == false, record:", record);
       }
-    };*/
+    };
+    */
     return {
       onChangeSelection,
       getCheckboxProps,

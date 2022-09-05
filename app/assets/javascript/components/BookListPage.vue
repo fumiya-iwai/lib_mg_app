@@ -1,23 +1,27 @@
 <template>
-
+  
   <a-row type="flex" justify="space-between">
-    <a-col>
+    <a-col justify="start">
       <a-typography-title :level="2">図書一覧</a-typography-title>
     </a-col>
-    <a-col>
-      <a-checkbox 
-      v-model:checked = "firstRentableFlg"
-      @change="onChange">
-        <a-typography-title :level="5">貸出可能のみ表示する</a-typography-title>
-      </a-checkbox>
-    </a-col>
-    <a-col>
+    <a-col justify="end">
       <a-input-search
         v-model:value="state.searchText"
         placeholder="キーワードで検索"
         enter-button
         @search="search(state.searchText, 1)"
       />
+      <a-checkbox 
+      :span="4"
+      v-model:checked = "firstRentableFlg"
+      @change="onChange">
+        <a-typography-title :level="5">貸出可能のみ表示する</a-typography-title>
+      </a-checkbox>
+      <a-select
+        placeholder="Select a person"
+        :options="category"
+        >
+      </a-select>
     </a-col>
   </a-row>
 
@@ -41,11 +45,6 @@
 </template>
 
 <script>
-/*
-メモ dataのテーブルは以下のようになっている前提で開発
-id | title | author_name | rental_user_name | is_rentable | category_id|
-------------------------------------------------------------------
-*/
 import { defineComponent, reactive, ref } from 'vue'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
@@ -62,11 +61,26 @@ export default defineComponent({//JSとVue.jsの境界
 
     const COLUMNS = [
       {title: 'タイトル',dataIndex: 'title',ellipsis: true,},
-      {title: 'カテゴリ',dataIndex: 'category_id',width: '200px',ellipsis: true,},
+      {title: 'カテゴリ',dataIndex: 'category_name',width: '200px',ellipsis: true,},
       {title: '著者',dataIndex: 'author_name',width: '200px',ellipsis: true,},
       {title: '貸し出し状況',dataIndex: 'rental_state',width: '200px',ellipsis: true,},
       {title: '借主名',dataIndex: 'rental_user_name',width: '200px',ellipsis: true,},
     ];
+
+    // カテゴリを取得する
+    const categories = reactive([]);
+    axios
+      .get('/api/v1/books/categories')
+      .then(function (response) {
+        response.data.forEach(function(category) {
+          categories.push({
+            value: category['value'],
+            label: category['label']
+          })
+        });
+      });
+    console.log("value:",categories);
+
 
     const state = reactive({//変数初期値
       books: [],
@@ -74,9 +88,6 @@ export default defineComponent({//JSとVue.jsの境界
       searchText: '',
       selectedBookIds: [],
       currentPage: 1,
-      //rentBooks: [],
-      //hoge: [],
-      //isRentable: [],
     });
     let lastSearchText = ''; // ページング時はテキストボックスの内容に依らず検索させるため、別に保持させる
 
@@ -92,16 +103,9 @@ export default defineComponent({//JSとVue.jsの境界
           },
         })
         .then(function (response) {
-          console.log("hogee");
-          console.log(response);
-          //state.rentBooks = response.data.data_rented;
           state.books = response.data.data;
-          state.rentBooks = response.data.data_rented;
           state.totalBooks = response.data.count;
           state.currentPage = page;
-          //state.hoge = state.books.concat(state.rentBooks)
-          //state.isRentable = state.hoge.is_rentable;
-          //console.log(state.hoge[0].is_rentable);
           tmpPage = page;
           tmpSearchText = searchText;
           // テキストボックスが変更された状態でページネーションされた場合を考慮し、
@@ -133,12 +137,10 @@ export default defineComponent({//JSとVue.jsの境界
     };
     const onChange = (e) =>{//チェックボックスがチェックされた
       if(e.target.checked){//貸し出し中を表示しないとき
-        //console.log('checked, rentableOnlyFlg:%s', rentableOnlyFlg);//デバック用ログ
         rentableOnlyFlg = true;
         search(tmpSearchText,1);
       }
       else{//貸し出し中を表示するとき
-        //console.log('unchecked');//デバック用ログ
         rentableOnlyFlg = false;
         search(tmpSearchText,1);
       }

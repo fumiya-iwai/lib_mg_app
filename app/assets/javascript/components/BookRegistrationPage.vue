@@ -31,7 +31,7 @@
 
       <a-form-item
         has-feedback
-        label="カテゴリー"
+        label="カテゴリ"
         name="category_id"
       >
         <a-select v-model:value="formState.category_id" :options="categories">
