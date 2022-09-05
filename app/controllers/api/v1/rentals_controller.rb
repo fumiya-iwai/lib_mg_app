@@ -45,7 +45,10 @@ class Api::V1::RentalsController < Api::V1::BaseController
     ActiveRecord::Base.transaction do
       rentals.update_all(returned_date: Date.current)
       return_books_count = return_books_params[:rental_ids].size
-      over_deadline_books_count=Rental.where(user_id: current_user).where('id = ?', return_books_params[:rental_ids]).where('? < ?',[:scheduled_return_date], Date.today).count
+      over_deadline_books_count = Rental.where(user_id: current_user)
+                                        .where(id: return_books_params[:rental_ids])
+                                        .where('scheduled_return_date < ?', Date.today)
+                                        .count
       user = current_user
       user.point += (return_books_count - 3*over_deadline_books_count)
       user.point = 0 if user.point < 0
