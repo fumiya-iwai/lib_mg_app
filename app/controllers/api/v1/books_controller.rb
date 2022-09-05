@@ -1,19 +1,18 @@
 class Api::V1::BooksController < Api::V1::BaseController
 
   def create
-    Book.new(books_param).save!
+    ActiveRecord::Base.transaction do
+      Book.new(books_param).save!
+      user = current_user
+      user.point += 10
+      user.save!
+    end
     render json: '', status: :created
-    user = current_user
-    user.point += 10
-    user.save!
   end
 
   def index
     books = Book.all.order(id: :desc)
 
-    # if params[:rentable]
-    #   books = books.rentable
-    # end
 
     if params[:search_text]
       books = books.search_text(params[:search_text])
