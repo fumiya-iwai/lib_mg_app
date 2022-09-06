@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2022_08_30_030924) do
     t.bigint "author_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "category_id", default: 6
+    t.integer "category_id", default: 16
     t.index ["author_id"], name: "index_books_on_author_id"
   end
 
@@ -56,4 +56,3 @@ ActiveRecord::Schema.define(version: 2022_08_30_030924) do
   add_foreign_key "rentals", "books"
   add_foreign_key "rentals", "users"
 end
-# ジャンルはカテゴリ

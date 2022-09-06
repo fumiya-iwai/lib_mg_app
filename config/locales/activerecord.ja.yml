@@ -21,11 +21,21 @@ ja:
   enums:
     book:
       category_id:
-        English: "英語"
-        Math: "数学"
-        Physics: "物理"
-        Science: "化学"
-        Biology: "生物"
+        general_education: "一般教養"
+        first_foreign_language: "第一外国語"
+        second_foreign_language: "第二外国語"
+        literature: "文学"
+        psychology: "心理学"
+        jurisprudence: "法学"
+        economics: "経済学"
+        business_administration: "経営学"
+        math: "数学"
+        physics: "物理学"
+        chemistry: "化学"
+        biology: "生物学"
+        infomatics: "情報学"
+        medicine: "医学"
+        pharmacy: "薬学"
         Others: "その他"
 
     # モデルで定義したvalidate error
