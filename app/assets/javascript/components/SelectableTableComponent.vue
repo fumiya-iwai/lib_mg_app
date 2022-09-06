@@ -7,6 +7,7 @@
     :rowKey="$props.rowKey"
     :row-selection="{ getCheckboxProps:getCheckboxProps, selectedRowKeys: $props.selectedRowKeys, onChange: onChangeSelection }"
     :pagination="false"
+    :custom-row="customRow"
     :scroll="{ x: 800 }"/>
 
   <a-row type="flex" justify="space-between" style="margin-top: 20px;">
@@ -39,8 +40,6 @@ export default defineComponent({
   },
   emits: ['onChangePage', 'onChangeSelect'],
   setup(props, context) {
-    console.log("sss")
-    console.log(props);
     const onChangeSelection = (selectedRowKeys) => {
       context.emit('onChangeSelection', selectedRowKeys)
     };
@@ -56,29 +55,19 @@ export default defineComponent({
       else {return false}
     };
 
-    /*const customRow = (record) => {
+    const customRow = (record) => {
       //貸出一覧返却期限が過ぎている本があれば
       //レコードの背景を赤くする処理の実装部分
-      let date = new Date();
-      //console.log("date:", date);
-      //if(!props.isBookList && record.title === 'test_data1'){
-        if(!props.isBookList){
-          //console.log("record.scheduled_return_date:", record.scheduled_return_date);
-          //console.log("record.scheduled_return_date:",new_date);
-        return {style: {
-          'background-color': '#e04848'
-        }};
-      }
-      //BookListPageからのアクセスなら貸し出し状況をis_rentableに応じて変更
-      if(props.isBookList && record.is_rentable === false){
-        console.log("record.is_rentable == false, record:", record);
-      }
+        if(!props.isBookList&& !record.check_date){
+          return {style: {
+            'background-color': '#e04848'
+          }};
+        }
     };
-    */
     return {
       onChangeSelection,
       getCheckboxProps,
-      //customRow,
+      customRow,
     }
   }
 })
