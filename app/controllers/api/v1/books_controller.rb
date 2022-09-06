@@ -59,10 +59,14 @@ class Api::V1::BooksController < Api::V1::BaseController
 
   def to_api_response(books)
     data = books.eager_load(:author).includes(rentals: :user).references(rentals: :user).map do |book|
-      is_rentable = (book.rentals.size > 0 ? false : true)
+      presence_of_rentals = (book.rentals.size > 0 ? false : true)
+      returned_date = Rental.where(book_id: book.id).pluck("returned_date")
+      returned_date_length = returned_date.length
+      is_rentable = true
       user_name = ''
       
-      if is_rentable == false
+      if presence_of_rentals == false && returned_date[returned_date_length-1] == nil
+        is_rentable = false
         rental = book.rentals[0]
         user_name = rental.user.last_name + ' ' + rental.user.first_name
       end
@@ -74,7 +78,7 @@ class Api::V1::BooksController < Api::V1::BaseController
         author_name: book.author.name,
         is_rentable: is_rentable,
         rental_state: is_rentable ? '貸出可能' : '貸出不可',
-        rental_user_name: user_name
+        rental_user_name: user_name,
       }
     end
 
