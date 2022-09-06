@@ -15,12 +15,22 @@ class Book < ApplicationRecord
   }
 
   enum category_id: {
-    English: 1,
-    Math: 2,
-    Physics: 3,
-    Science: 4,
-    Biology: 5,
-    Others: 6,
+    general_education:1,
+    first_foreign_language: 2,
+    second_foreign_language: 3,
+    literature: 4,
+    psychology: 5,
+    jurisprudence: 6,
+    economics: 7,
+    business_administration: 8,
+    math: 9,
+    physics: 10,
+    chemistry: 11,
+    biology: 12,
+    infomatics: 13,
+    medicine: 14,
+    pharmacy: 15,
+    Others: 16
   }
 
 end
