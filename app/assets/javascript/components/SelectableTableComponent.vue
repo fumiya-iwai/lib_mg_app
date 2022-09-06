@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   //親コンポーネントからのデータ受け取り
