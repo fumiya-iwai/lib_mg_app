@@ -11,19 +11,23 @@
         enter-button
         @search="search(state.searchText, 1,null)"
       />
-      <a-checkbox 
-      :span="4"
-      v-model:checked = "firstRentableFlg"
-      @change="onChange">
-        <a-typography-title :level="5">貸出可能のみ表示する</a-typography-title>
-      </a-checkbox>
-      <a-select
-        placeholder="カテゴリを選択"
-        :options="categories"
-        style="width: 200px"
-        @change="handleChange"
-        >
-      </a-select>
+      <p></p>
+      <a-col>
+        <a-checkbox 
+        :span="4"
+        v-model:checked = "firstRentableFlg"
+        @change="onChange">
+          <a-typography-title :level="5">貸出可能のみ表示する</a-typography-title>
+        </a-checkbox>
+        <a-select
+          :span="4"
+          placeholder="カテゴリを選択"
+          :options="categories"
+          style="width: 200px"
+          @change="handleChange"
+          >
+        </a-select>
+      </a-col>
     </a-col>
   </a-row>
 
@@ -132,9 +136,6 @@ export default defineComponent({
           },
         })
         .then(function (response) {
-          if(response.data.data.length != 0){
-            console.log("vfdf");
-          }
           state.books = response.data.data;
           state.totalBooks = response.data.count;
           state.currentPage = page;
@@ -184,7 +185,6 @@ export default defineComponent({
     };
     // 初期リスト作成
     search('', 1, searchCategory);
-
     return {
       COLUMNS,
       state,

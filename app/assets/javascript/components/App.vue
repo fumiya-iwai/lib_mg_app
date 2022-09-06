@@ -17,27 +17,28 @@
             </a-col>
           </a-row>
         </a-col>
-        <a-col>
-          <span>{{ state.point }} PT</span>
+        <a-col :span="1">
+          <p>
+            {{ state.point }} PT
+
+          </p>
         </a-col>
-        <a-col justify="end" style="margin-left: 24px">
-          <a-dropdown trigger="['click']">
-            <img src="~user.svg" width="40" style="cursor: pointer">
-            <template #overlay>
-              <a-menu>
-                <a-menu-item>
-                  <a href="/#/rentals">
+        <a-col flex="auto" justify="end" :span="1">
+          <a-popover justify="end" title="マイページ">
+          <img src="~user.svg" width="40" style="cursor: pointer">
+            <template #content>
+              <p>
+                <a href="/#/rentals">
                     借りている本
-                  </a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="/logout">
-                    ログアウト
-                  </a>
-                </a-menu-item>
-              </a-menu>
+                </a>
+              </p>
+              <p>
+                <a href="/logout">
+                  ログアウト
+                </a>
+              </p>
             </template>
-          </a-dropdown>
+        </a-popover>      
         </a-col>
       </a-row>
     </a-layout-header>
