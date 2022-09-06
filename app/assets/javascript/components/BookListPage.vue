@@ -60,6 +60,7 @@ export default defineComponent({
   },
   setup(_props,context) {
     const ROWS_PER_PAGE = 10; // 1ページあたりの表示行数
+    let searchCategory = null;
 
     const COLUMNS = [
       {
@@ -94,6 +95,10 @@ export default defineComponent({
 
     // カテゴリを取得する
     const categories = reactive([]);
+    categories.push({
+      value: null,
+      label: "すべてのカテゴリ"
+    });
     axios
       .get('/api/v1/books/categories')
       .then(function (response) {
@@ -127,6 +132,9 @@ export default defineComponent({
           },
         })
         .then(function (response) {
+          if(response.data.data.length != 0){
+            console.log("vfdf");
+          }
           state.books = response.data.data;
           state.totalBooks = response.data.count;
           state.currentPage = page;
@@ -138,6 +146,7 @@ export default defineComponent({
           lastSearchText = searchText;
           // 検索後はチェックボックスの選択状態を初期化する（ページを跨いで選択させない）
           state.selectedBookIds = [];
+          console.log("data:", state.books);
         })
     }
     const rentBooks = () => {
@@ -148,32 +157,33 @@ export default defineComponent({
         .then(function () {
           message.success(`${state.selectedBookIds.length}冊の本を借りました。`, 3);
           context.emit('updatepoint');
-          search(lastSearchText, 1);
+          search(lastSearchText, 1, searchCategory);
         });
     }
 
     const changePage = (page) => {
-      search(lastSearchText, page, null);
+      search(lastSearchText, page, searchCategory);
     };
 
     const updateSelections = (selectedRowKeys) => {
       state.selectedBookIds = selectedRowKeys;//チェックされた行のBookId一覧を取得
     };
-    const onChange = (e) =>{//チェックボックスがチェックされた
+    const onChange = (e) =>{//チェックボックスが操作された
       if(e.target.checked){//貸し出し中を表示しないとき
         rentableOnlyFlg = true;
-        search(tmpSearchText,1, null);
+        search(tmpSearchText, 1, searchCategory);
       }
       else{//貸し出し中を表示するとき
         rentableOnlyFlg = false;
-        search(tmpSearchText,1);
+        search(tmpSearchText, 1, searchCategory);
       }
     };
     const handleChange = (value) => {
       search(lastSearchText, 1, value);
+      searchCategory = value;
     };
     // 初期リスト作成
-    search('', 1, null);
+    search('', 1, searchCategory);
 
     return {
       COLUMNS,
@@ -186,9 +196,8 @@ export default defineComponent({
       firstRentableFlg: ref(rentableOnlyFlg),
       categories,
       handleChange,
+      searchCategory,
     }
   },
-  
-  
 })
 </script>
